@@ -31,8 +31,9 @@ app.use("/products", productRoutes) // to search products
 app.use("/api/orders",orderRoutes)
 
 // ADMIN CAN DELETE PRODUCTS ON:
-
 // http://localhost:5000/admin/admin/id
+// UPDATE ORDER STATUS:
+// http://localhost:5000/api/orders/67b0a42f1c9733dade515ac0/status
 
 app.listen(PORT,()=>{
     console.log(`server is listening on : http://localhost:${PORT} `);
