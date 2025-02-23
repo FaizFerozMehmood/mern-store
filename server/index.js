@@ -37,8 +37,7 @@ app.use("/api/orders",orderRoutes)
 
 app.listen(PORT,()=>{
     console.log(`server is listening on : http://localhost:${PORT} `);
-    
 })
 
-
+   
 console.log("hello");

@@ -26,7 +26,7 @@ export const CreateOrder = async (req, res) => {
       return sendResponse(res, 400, null, true, "invalid total price");
     }
     if (!req.user || !req.user._id) {
-      return sendResponse(res, 401, null, true, "unauthorized!");
+      return sendResponse(res, 401, null, true, "unauthorized!,no user found!");
     }
     const order = new Order({
       user: req.user._id,
@@ -45,6 +45,7 @@ export const CreateOrder = async (req, res) => {
 
 export const getOrders = async (req, res) => {
   try {
+    
     const { _id } = req.params;
     console.log(_id);
     if (_id) {

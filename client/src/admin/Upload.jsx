@@ -1,8 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 import { url } from "../api/API";
-import Cookies from "js-cookie";
 import ProductCart from "./ProductCart.jsx";
+import AdminNav from "./AdminNav.jsx";
 
 const ProductForm = () => {
   const [product, setProduct] = useState({
@@ -14,11 +14,22 @@ const ProductForm = () => {
     image: "",
   });
 
-  const token = Cookies.get("AdminToken");
+  const token = localStorage.getItem("AdminToken");
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const categories = ["Electronics", "Clothing", "Books", "Furniture", "Toys"];
+  const categories = [
+    "Electronics",
+    "Clothing",
+    "Books",
+    "Dry Fruits",
+    "Furniture",
+    "Toys",
+    "Makeup",
+    "Perfumes",
+    "Headphones",
+    "Educational & Academic Books",
+  ];
 
   const handleChange = (e) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
@@ -61,7 +72,6 @@ const ProductForm = () => {
       console.log(response.data);
       alert(response.data.msg);
 
-      // Reset form after submission
       setProduct({
         productName: "",
         price: "",
@@ -77,14 +87,25 @@ const ProductForm = () => {
   };
 
   return (
-    <div style={{
-      backgroundColor:"black",
-      color:"white"
-    }}>
+    <div>
+      <AdminNav/>
+    <div
+      style={
+        {
+          // backgroundColor:"black",
+          // color:"white"
+        }
+      }
+    >
+      
       <h2>Add Product</h2>
       <form onSubmit={handleSubmit}>
-        {/* Category Dropdown */}
-        <select name="category" value={product.category} onChange={handleChange} required>
+        <select
+          name="category"
+          value={product.category}
+          onChange={handleChange}
+          required
+        >
           <option value="">Select a Category</option>
           {categories.map((cat, index) => (
             <option key={index} value={cat}>
@@ -125,7 +146,6 @@ const ProductForm = () => {
           required
         />
 
-        {/* Image Upload */}
         <input type="file" onChange={handleFileChange} />
         <button type="button" onClick={uploadImage} disabled={loading}>
           {loading ? "Uploading..." : "Upload Image"}
@@ -137,6 +157,7 @@ const ProductForm = () => {
       <div>
         <ProductCart />
       </div>
+    </div>
     </div>
   );
 };

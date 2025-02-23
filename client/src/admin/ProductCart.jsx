@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import cookies from "js-cookie";
+import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { DeleteOutlined, LogoutOutlined } from "@ant-design/icons";
 import axios from "axios";
-import Cookies from "js-cookie";
 import { Button, Card, Col, Row, Typography, Spin } from "antd";
 import { url } from "../api/API";
 
@@ -12,10 +11,19 @@ const { Title, Text } = Typography;
 function ProductCart() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const getProducts = async () => {
     try {
-      const token = Cookies.get("adminToken");
+      // const token = Cookies.get("adminToken");
+      const token = localStorage.getItem("AdminToken")
+      console.log("Token in GET request:", token);
+      
+      if (!token) {
+        console.error("No token found for GET request!");
+        return;
+      }
+
       setLoading(true);
       const response = await axios.get(url.getProducts, {
         headers: {
@@ -26,7 +34,7 @@ function ProductCart() {
       setData(response.data?.data);
     } catch (error) {
       setLoading(false);
-      console.log("Error fetching products:", error);
+      console.error("Error fetching products:", error.response?.data || error);
     }
   };
 
@@ -34,34 +42,39 @@ function ProductCart() {
     getProducts();
   }, []);
 
-  const navigate = useNavigate();
-
   const handleLogout = () => {
-    cookies.remove("userInfo");
-    cookies.remove("userToken");
-    cookies.remove("adminToken");
+    Cookies.remove("userInfo");
+    // Cookies.remove("userToken");
+    // Cookies.remove("adminToken");
     navigate("/login");
+    localStorage.clear();
+
   };
 
-  const handleDelete = async(id) => {
-    console.log("clicked",id);
+  const handleDelete = async (id) => {
+    console.log("clicked", id);
+    // const token = Cookies.get("adminToken");
+    const token = localStorage.getItem("AdminToken")
+    console.log("Token in DELETE request:", token);
     
-    const token = cookies.get("adminToken")
-        try {
-          const response = await axios.delete(`${url.deleteProduct}/${id}`,{
-            headers:{
-              Authorization:`Bearer ${token}`
-            }
-          })
+    if (!token) {
+      console.error("No token found for DELETE request!");
+      return;
+    }
 
-          console.log(response.data);  
-          
-        } catch (error) {
-          console.log("error deleting product",error);
-          
-        }
-   
-  }
+    try {
+      const response = await axios.delete(`${url.deleteProduct}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("Delete response:", response.data);
+      getProducts()
+    } catch (error) {
+      console.error("Error deleting product:", error.response?.data || error);
+    }
+  };
+
   return (
     <div style={{ padding: "20px", textAlign: "center" }}>
       {/* Logout Button */}
@@ -80,7 +93,6 @@ function ProductCart() {
         Logout
       </Button>
 
-      {/* Product List */}
       <Row gutter={[16, 16]} justify="center">
         {loading ? (
           <Spin size="large" />
@@ -103,17 +115,18 @@ function ProductCart() {
                   ${product.price}
                 </Text>
                 <Text type="secondary">{product.des}</Text>
-                <button onClick={()=>handleDelete(product._id)}>
-                <DeleteOutlined 
-                 style={{
-                  marginTop: "20px",
-                  display: "flex",
-                  alignItems: "center",
-                  fontSize:"20px",
-                  color:"red",
-                  justifyContent: "center",
-                  cursor:"pointer"
-                }} />
+                <button onClick={() => handleDelete(product._id)}>
+                  <DeleteOutlined
+                    style={{
+                      marginTop: "20px",
+                      display: "flex",
+                      alignItems: "center",
+                      fontSize: "20px",
+                      color: "red",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                    }}
+                  />
                 </button>
               </Card>
             </Col>

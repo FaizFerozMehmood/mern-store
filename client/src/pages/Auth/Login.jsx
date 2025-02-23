@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Spin } from "antd";
 import { url } from "../../api/API";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const Login = () => {
@@ -14,43 +14,57 @@ const Login = () => {
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
-    console.log("received values of form: ", values);
+    console.log("Received values of form: ", values);
     setIsLoading(true);
+
     const loginData = {
       email: values.email,
       password: values.password,
     };
+
     try {
       const response = await axios.post(url.login, loginData);
-      form.resetFields();
-      console.log(response.data?.data.user.role);
-      // console.log(response.data?.data?.user);
-      Cookies.set("userInfo", JSON.stringify(response.data?.data?.user), {
-        expires: 7,
-      });
-      if(response.data?.data?.user?.role == "admin"){
-        Cookies.set("AdminToken",response.data?.data?.token,{
-          expires:7,
-        })
-      }
-      else{
-        Cookies.set("userToken",response.data?.data?.token,{
-          expires: 7,
-        })
+      console.log("Token:", response.data?.data?.token);
 
+      form.resetFields();
+
+      // Store user info in cookies
+      Cookies.set("userInfo", JSON.stringify(response.data?.data?.user), { expires: 7 });
+
+      // Store token in local storage
+      if (response.data?.data?.user?.role === "admin") {
+        localStorage.setItem("AdminToken", response.data?.data?.token);
+      } else {
+        localStorage.setItem("UserToken", response.data?.data?.token);
       }
 
       if (response.status === 200) {
         toast.success(response.data?.msg);
+
+        // ✅ Navigate immediately after successful login
         setTimeout(() => {
-          // navigate("/dashboard");
-          const userInfos = Cookies.get("userInfo") ? JSON.parse(Cookies.get("userInfo")) :null
-          if( userInfos.role == "admin") return  navigate("/admin")
-            if( userInfos.role == "user") return navigate("/")
-        }, 2000);
+          const userInfoString = Cookies.get("userInfo");
+          if (userInfoString) {
+            try {
+              const userInfo = JSON.parse(userInfoString);
+              console.log("Navigating to:", userInfo.role === "admin" ? "/admin" : "/cartItemsPage");
+
+              if (userInfo.role === "admin") {
+                navigate("/admin");
+              } else {
+                navigate("/cartItemsPage"); // Navigate to user dashboard
+              }
+            } catch (error) {
+              console.error("Error parsing user info:", error);
+              toast.error("Failed to parse user information.");
+            }
+          } else {
+            toast.error("User info not found.");
+          }
+        }, 2000); // Add delay to allow user to see the success message
       }
     } catch (error) {
-      toast.error(error.message || "Something went wrong!");
+      toast.error("Something went wrong!");
     } finally {
       setIsLoading(false);
     }
@@ -68,37 +82,16 @@ const Login = () => {
           onFinish={onFinish}
           layout="vertical"
         >
-          <Form.Item
-            name="email"
-            rules={[{ required: true, message: "Please input your Email!" }]}
-          >
-            <Input
-              prefix={<MailOutlined style={styles.icon} />}
-              placeholder="Email"
-              style={styles.input}
-            />
+          <Form.Item name="email" rules={[{ required: true, message: "Please input your Email!" }]}>
+            <Input prefix={<MailOutlined style={styles.icon} />} placeholder="Email" style={styles.input} />
           </Form.Item>
 
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: "Please input your Password!" }]}
-          >
-            <Input
-              prefix={<LockOutlined style={styles.icon} />}
-              type="password"
-              placeholder="Password"
-              style={styles.input}
-            />
+          <Form.Item name="password" rules={[{ required: true, message: "Please input your Password!" }]}>
+            <Input prefix={<LockOutlined style={styles.icon} />} type="password" placeholder="Password" style={styles.input} />
           </Form.Item>
 
           <Form.Item>
-            <Button
-              block
-              type="primary"
-              htmlType="submit"
-              disabled={isLoading}
-              style={styles.button}
-            >
+            <Button block type="primary" htmlType="submit" disabled={isLoading} style={styles.button}>
               {isLoading ? <Spin size="small" /> : "Log in"}
             </Button>
           </Form.Item>
@@ -112,15 +105,7 @@ const Login = () => {
         </Form>
       </div>
 
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        closeOnClick
-        pauseOnHover
-        draggable
-        theme="colored"
-      />
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} closeOnClick pauseOnHover draggable theme="colored" />
     </div>
   );
 };

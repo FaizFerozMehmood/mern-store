@@ -7,8 +7,8 @@ import adminRole from "../middleware/admin-middleWare.js";
 const router = express.Router();
 
 router.post("/",authMiddleware,CreateOrder)
-router.get("/",authMiddleware,adminRole,getOrders)
+router.get("/getOrders",authMiddleware,getOrders)
 router.put("/:id/status",authMiddleware,adminRole,updateOrderStatus)
 
 
-export default router;    
+export default router;      

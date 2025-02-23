@@ -9,7 +9,9 @@ export const url = {
   adminRoutes: `${BASE_URL}admin/admin`,
   deleteProduct :`${BASE_URL}admin/admin`,
   uploadImage :`${BASE_URL}api/files/upload/` ,
-  getProducts:`${BASE_URL}user/products`
+  getProducts:`${BASE_URL}user/products`,
+  createOrder:`${BASE_URL}api/orders`,
+  getPlacedOrders:`${BASE_URL}api/orders/getOrders`
 };
 
 // http://localhost:5000/api/files/upload
