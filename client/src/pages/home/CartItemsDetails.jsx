@@ -149,7 +149,7 @@ function CartItemsDetails() {
       localStorage.removeItem("cartItem");
       setCart([]);
       setItems([]);
-      navigate("/orderSuccess");
+      navigate("/checkorder");
     } catch (error) {
       console.error(
         "Error placing order",

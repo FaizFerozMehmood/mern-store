@@ -24,21 +24,28 @@ export const getProduct = async (req, res) => {
 
 export const searchProducts = async (req, res) => {
   try {
-    const { query } = req.query;
-    if (!query)
-      return sendResponse(res, 404, null, true, "please type to search!");
+    const { search } = req.query;
+
+    if (!search) {
+      return sendResponse(res, 400, null, true, "Please type to search!");
+    }
 
     const data = await Product.find({
       $or: [
-        { name: { $regex: query, $options: "i" } },
-        { title: { $regex: query, $options: "i" } },
-        { des: { $regex: query, $options: "i" } },
+        { title: { $regex: search, $options: "i" } },
+        // { description: { $regex: search, $options: "i" } },
       ],
     });
 
-    sendResponse(res, 200, data, false, "see the products against your search!");
+    return sendResponse(
+      res,
+      200,
+      data,
+      false,
+      data.length > 0 ? "Products found!" : "No products match your search."
+    );
   } catch (error) {
-    return sendResponse(res, 500, null, true, "internal server error!");
+    console.error("Search error:", error);
+    return sendResponse(res, 500, null, true, "Internal server error!");
   }
 };
-

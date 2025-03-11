@@ -11,7 +11,10 @@ export const url = {
   uploadImage :`${BASE_URL}api/files/upload/` ,
   getProducts:`${BASE_URL}user/products`,
   createOrder:`${BASE_URL}api/orders`,
-  getPlacedOrders:`${BASE_URL}api/orders/getOrders`
+  getPlacedOrders:`${BASE_URL}api/orders/getOrders`,
+  updateOrderStatus : `${BASE_URL}api/orders`,
+  getuserOrder : `${BASE_URL}api/orders/myorder`,
+  searchProducts:`${BASE_URL}products/search`,
 };
 
 // http://localhost:5000/api/files/upload

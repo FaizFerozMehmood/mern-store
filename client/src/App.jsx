@@ -12,6 +12,9 @@ import Navbar from "./pages/home/Navbar";
 import CartItemsDetails from "./pages/home/CartItemsDetails.jsx";
 import GetOrders from "./admin/GetOrders.jsx";
 import AdminNav from "./admin/AdminNav.jsx";
+// import CheckOrder from "./pages/home/CheckOrder.jsx";
+import UserOrders from "./pages/home/OrderSuccess.jsx";
+import ProductCart from "./admin/ProductCart.jsx";
 
 function App() {
   // const HandleAuth = () => {
@@ -33,7 +36,14 @@ function App() {
   // };
 
   return (
-    <BrowserRouter>  
+    <BrowserRouter
+    >
+      <div style={{
+        margin:"0px",
+        padding:"0px",
+        boxSizing:"border-box"
+      }}>
+
       {/* <HandleAuth /> */}
       <Routes>
         <Route path={"/register"} element={<Register />} />
@@ -45,7 +55,11 @@ function App() {
 
         {/* <Route path={"/card"} element={<Ca />} /> */}
         <Route path={"/admin"} element={<ProductForm />} />
+        <Route path={"/adminProduct"} element={<ProductCart />} />
         <Route path={"/getOrders"} element={<GetOrders />} />
+        {/* <Route path={"/UserOrders"} element={<UserOrders />} /> */}
+        {/* <Route path={"/checkorder"} element={<CheckOrder />} /> */}
+        <Route path={"/userOrder"} element={<UserOrders />} />
         {/* <Route path={"/header"} element={<HeaderComp />} /> */}
         <Route
           path="/header"
@@ -55,7 +69,7 @@ function App() {
             </AdminProtectedRoutes>
           }
         />
-         {/* <Route
+        {/* <Route
           path="/image"
           element={
             <AdminProtectedRoutes>
@@ -64,6 +78,8 @@ function App() {
           }
         /> */}
       </Routes>
+      </div>
+
     </BrowserRouter>
   );
 }

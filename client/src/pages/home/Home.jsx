@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { DeleteOutlined, LogoutOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { url } from "../../api/API";
-import Cookies from "js-cookie";
 import { Card, Col, Row, Typography, Spin } from "antd";
 import Navbar from "./Navbar";
 
@@ -13,21 +11,52 @@ const { Title, Text } = Typography;
 function Home() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const [search, setSearch] = useState("");
+  const navigate = useNavigate();
+  // const [IsHovered,setIsHovered] = useState(false)
+  useEffect(() => {
+    const token =
+      localStorage.getItem("UserToken") || localStorage.getItem("AdminToken");
+    if (!token) {
+      return navigate("/login");
+    }
+  }, [navigate]);
   const getProducts = async () => {
     try {
       const token = localStorage.getItem("UserToken");
       setLoading(true);
       const response = await axios.get(url.getProducts, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
-      setLoading(false);
       setData(response.data?.data);
     } catch (error) {
+      console.log("Error fetching products:", error);
+    } finally {
       setLoading(false);
-      console.log("error fetching products:", error);
+    }
+  };
+
+  const searchProductFun = async () => {
+    if (!search.trim()) {
+      getProducts();
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("UserToken");
+      setLoading(true);
+      const response = await axios.get(
+        `${url.searchProducts}/?search=${search}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setData(response.data?.data || []);
+    } catch (error) {
+      console.log("Error searching products:", error);
+      setData([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -35,22 +64,20 @@ function Home() {
     getProducts();
   }, []);
 
-  // const navigate = useNavigate();
-  // const userInfo = Cookies.get("userInfo");
+  useEffect(() => {
+    searchProductFun();
+  }, [search]);
 
-  const handleAddToCart = async (id) => {
-    console.log("iddd", id);
+  const handleAddToCart = (id) => {
     let cart = JSON.parse(localStorage.getItem("cartItem")) || [];
-    let existitem = cart.find((item) => item.id === id);
-    if (existitem) {
-      existitem.quantity += 1;
+    let existItem = cart.find((item) => item.id === id);
+    if (existItem) {
+      existItem.quantity += 1;
     } else {
       cart.push({ id, quantity: 1 });
     }
     localStorage.setItem("cartItem", JSON.stringify(cart));
-    console.log("cart====>", cart);
   };
-  
 
   return (
     <div>
@@ -62,6 +89,22 @@ function Home() {
           backgroundColor: "rgba(245, 249, 250)",
         }}
       >
+        <div
+          style={{
+            marginTop: "60px",
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "20px",
+          }}
+        >
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            style={{ padding: "10px 60px", borderRadius: "3px" }}
+            type="search"
+            placeholder="Search products"
+          />
+        </div>
         <Row gutter={[16, 16]} justify="center">
           {loading ? (
             <Spin size="large" />
@@ -69,7 +112,7 @@ function Home() {
             data.map((product) => (
               <Col key={product._id} xs={24} sm={12} md={8} lg={6}>
                 <Card
-                  hoverable
+                  // hoverable
                   cover={
                     <img
                       alt={product.title}
@@ -91,11 +134,13 @@ function Home() {
                     style={{
                       display: "flex",
                       justifyContent: "center",
-                      alignItems: "center",
                       width: "100%",
                     }}
                   >
                     <button
+                      // className="my-button"
+                      // onMouseEnter={() => setIsHovered(true)}
+                      // onMouseLeave={() => setIsHovered(false)}
                       onClick={() => handleAddToCart(product._id)}
                       style={{
                         marginTop: "20px",
@@ -106,10 +151,6 @@ function Home() {
                         padding: "5px 40px",
                         border: "none",
                         borderRadius: "5px",
-                        textAlign: "center",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
                       }}
                     >
                       Add to cart

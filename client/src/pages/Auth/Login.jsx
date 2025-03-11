@@ -28,10 +28,10 @@ const Login = () => {
 
       form.resetFields();
 
-      // Store user info in cookies
-      Cookies.set("userInfo", JSON.stringify(response.data?.data?.user), { expires: 7 });
+      Cookies.set("userInfo", JSON.stringify(response.data?.data?.user), {
+        expires: 7,
+      });
 
-      // Store token in local storage
       if (response.data?.data?.user?.role === "admin") {
         localStorage.setItem("AdminToken", response.data?.data?.token);
       } else {
@@ -41,18 +41,20 @@ const Login = () => {
       if (response.status === 200) {
         toast.success(response.data?.msg);
 
-        // ✅ Navigate immediately after successful login
         setTimeout(() => {
           const userInfoString = Cookies.get("userInfo");
           if (userInfoString) {
             try {
               const userInfo = JSON.parse(userInfoString);
-              console.log("Navigating to:", userInfo.role === "admin" ? "/admin" : "/cartItemsPage");
+              // console.log(
+              //   "Navigating to:",
+              //   userInfo.role === "admin" ? "/admin" : "/cartItemsPage"
+              // );
 
               if (userInfo.role === "admin") {
-                navigate("/admin");
+                navigate("/admin");   
               } else {
-                navigate("/cartItemsPage"); // Navigate to user dashboard
+                navigate("/");
               }
             } catch (error) {
               console.error("Error parsing user info:", error);
@@ -61,7 +63,7 @@ const Login = () => {
           } else {
             toast.error("User info not found.");
           }
-        }, 2000); // Add delay to allow user to see the success message
+        }, 2000);
       }
     } catch (error) {
       toast.error("Something went wrong!");
@@ -82,16 +84,37 @@ const Login = () => {
           onFinish={onFinish}
           layout="vertical"
         >
-          <Form.Item name="email" rules={[{ required: true, message: "Please input your Email!" }]}>
-            <Input prefix={<MailOutlined style={styles.icon} />} placeholder="Email" style={styles.input} />
+          <Form.Item
+            name="email"
+            rules={[{ required: true, message: "Please input your Email!" }]}
+          >
+            <Input
+              prefix={<MailOutlined style={styles.icon} />}
+              placeholder="Email"
+              style={styles.input}
+            />
           </Form.Item>
 
-          <Form.Item name="password" rules={[{ required: true, message: "Please input your Password!" }]}>
-            <Input prefix={<LockOutlined style={styles.icon} />} type="password" placeholder="Password" style={styles.input} />
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: "Please input your Password!" }]}
+          >
+            <Input
+              prefix={<LockOutlined style={styles.icon} />}
+              type="password"
+              placeholder="Password"
+              style={styles.input}
+            />
           </Form.Item>
 
           <Form.Item>
-            <Button block type="primary" htmlType="submit" disabled={isLoading} style={styles.button}>
+            <Button
+              block
+              type="primary"
+              htmlType="submit"
+              disabled={isLoading}
+              style={styles.button}
+            >
               {isLoading ? <Spin size="small" /> : "Log in"}
             </Button>
           </Form.Item>
@@ -105,7 +128,15 @@ const Login = () => {
         </Form>
       </div>
 
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} closeOnClick pauseOnHover draggable theme="colored" />
+      <ToastContainer   
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="colored"
+      />
     </div>
   );
 };

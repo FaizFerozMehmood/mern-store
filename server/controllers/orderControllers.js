@@ -81,7 +81,7 @@ export const getOrders = async (req, res) => {
 
 export const updateOrderStatus = async (req, res) => {
   try {
-    console.log("status===================>",req.body.status);
+    // console.log("status===================>",req.body.status);
     
     const { id } = req.params;
     const { status } = req.body;
@@ -93,14 +93,30 @@ export const updateOrderStatus = async (req, res) => {
     if (!order) {
       return sendResponse(res, 404, null, true, "Order not found!");
     }
-    order.status = status;
+    order.orderStatus = status;
     if (status === "Delivered") {
       order.deliveredAt = new Date();
     }
     await order.save();
+    console.log("Updated Order:", order);
     sendResponse(res, 200, order, false, "status updated!");
   } catch (error) {
     console.log("error updating order status!", error);
     return sendResponse(res, 500, null, true, "internal server error!");
+  }
+};
+export const getUserOrders = async (req, res) => {
+  try {
+    const userId = req.user.id; 
+    const orders = await Order.find({ user: userId }).sort({ createdAt: -1 });
+
+    if (!orders.length) {
+      return sendResponse(res, 404, null, true, "No orders found!");
+    }
+
+    sendResponse(res, 200, orders, false, "Orders retrieved successfully.");
+  } catch (error) {
+    console.error("Error fetching user orders:", error);
+    sendResponse(res, 500, null, true, "Internal Server Error.");
   }
 };

@@ -5,20 +5,19 @@ import { DeleteOutlined, LogoutOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { Button, Card, Col, Row, Typography, Spin } from "antd";
 import { url } from "../api/API";
+import Navbar from "./AdminNav";
 
 const { Title, Text } = Typography;
 
-function ProductCart() {
+const ProductCart = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const getProducts = async () => {
     try {
-      // const token = Cookies.get("adminToken");
-      const token = localStorage.getItem("AdminToken")
-      console.log("Token in GET request:", token);
-      
+      const token = localStorage.getItem("AdminToken");
+
       if (!token) {
         console.error("No token found for GET request!");
         return;
@@ -26,15 +25,14 @@ function ProductCart() {
 
       setLoading(true);
       const response = await axios.get(url.getProducts, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
-      setLoading(false);
+
       setData(response.data?.data);
     } catch (error) {
-      setLoading(false);
       console.error("Error fetching products:", error.response?.data || error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -42,56 +40,32 @@ function ProductCart() {
     getProducts();
   }, []);
 
-  const handleLogout = () => {
-    Cookies.remove("userInfo");
-    // Cookies.remove("userToken");
-    // Cookies.remove("adminToken");
-    navigate("/login");
-    localStorage.clear();
-
-  };
+  
 
   const handleDelete = async (id) => {
-    console.log("clicked", id);
-    // const token = Cookies.get("adminToken");
-    const token = localStorage.getItem("AdminToken")
-    console.log("Token in DELETE request:", token);
-    
+    const token = localStorage.getItem("AdminToken");
+
     if (!token) {
       console.error("No token found for DELETE request!");
       return;
     }
 
     try {
-      const response = await axios.delete(`${url.deleteProduct}/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      await axios.delete(`${url.deleteProduct}/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-      console.log("Delete response:", response.data);
-      getProducts()
+
+      getProducts();
     } catch (error) {
       console.error("Error deleting product:", error.response?.data || error);
     }
   };
 
   return (
-    <div style={{ padding: "20px", textAlign: "center" }}>
-      {/* Logout Button */}
-      <Button
-        type="primary"
-        icon={<LogoutOutlined />}
-        onClick={handleLogout}
-        style={{
-          marginBottom: "20px",
-          borderRadius: "20px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        Logout
-      </Button>
+
+    <div style={{ margin:"0px", textAlign: "center" }}>
+      <Navbar/>
+     
 
       <Row gutter={[16, 16]} justify="center">
         {loading ? (
@@ -115,19 +89,21 @@ function ProductCart() {
                   ${product.price}
                 </Text>
                 <Text type="secondary">{product.des}</Text>
-                <button onClick={() => handleDelete(product._id)}>
-                  <DeleteOutlined
-                    style={{
-                      marginTop: "20px",
-                      display: "flex",
-                      alignItems: "center",
-                      fontSize: "20px",
-                      color: "red",
-                      justifyContent: "center",
-                      cursor: "pointer",
-                    }}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Button
+                    type="text"
+                    danger
+                    icon={<DeleteOutlined />}
+                    onClick={() => handleDelete(product._id)}
+                    style={{ marginTop: "20px", fontSize: "22px" }}
                   />
-                </button>
+                </div>
               </Card>
             </Col>
           ))
@@ -137,6 +113,6 @@ function ProductCart() {
       </Row>
     </div>
   );
-}
+};
 
 export default ProductCart;

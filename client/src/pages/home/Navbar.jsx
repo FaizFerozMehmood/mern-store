@@ -9,29 +9,26 @@ const { Header } = Layout;
 const Navbar = () => {
   const [cartCount, setCartCount] = useState(0);
   const navigate = useNavigate();
-  console.log("Navigate function:", navigate);
 
-
-  // Load cart items
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem("cartItem")) || [];
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     setCartCount(totalItems);
   }, []);
 
-  // Handle Menu Navigation
   const handleNavigation = (e) => {
-    e.domEvent.preventDefault(); // Prevent default refresh behavior
+    e.domEvent.preventDefault();
     navigate(e.key);
   };
 
-  // Handle Cart Navigation
   const handleCartClick = (e) => {
-    e.preventDefault(); // Prevent any default action
+    e.preventDefault();
+    // if(cartCount.length ==0){
+    //  return alert("Add something & try to navigate!")
+    // }
     navigate("/cartItemsPage");
   };
 
-  // Handle Logout
   const handleLogout = () => {
     cookies.remove("userInfo");
     localStorage.removeItem("UserToken");
@@ -65,7 +62,6 @@ const Navbar = () => {
           MyStore
         </div>
 
-        {/* Navigation Menu (Using `items` instead of `children`) */}
         <Menu
           mode="horizontal"
           defaultSelectedKeys={["/"]}
@@ -77,13 +73,12 @@ const Navbar = () => {
           }}
           items={[
             { key: "/", label: "Home" },
-            { key: "/about", label: "About" },
+            { key: "/userOrder", label: "Order" },
             { key: "/services", label: "Services" },
             { key: "/contact", label: "Contact" },
           ]}
         />
 
-        {/* Right Section (Cart + Logout) */}
         <div
           style={{
             display: "flex",
@@ -92,14 +87,21 @@ const Navbar = () => {
             gap: "20px",
           }}
         >
-          {/* Cart Button */}
-          <Button type="text" onClick={handleCartClick} style={{ cursor: "pointer", border: "none" }}>
+          <Button
+            type="text"
+            onClick={handleCartClick}
+            style={{ cursor: "pointer", border: "none" }}
+          >
             <Badge count={cartCount} showZero>
-              <Avatar style={{ cursor: "pointer", backgroundColor: "black" }} shape="square" size="middle" icon={<ShoppingCartOutlined />} />
+              <Avatar
+                style={{ cursor: "pointer", backgroundColor: "black" }}
+                shape="square"
+                size="middle"
+                icon={<ShoppingCartOutlined />}
+              />
             </Badge>
           </Button>
 
-          {/* Logout Button */}
           <Button
             icon={<LogoutOutlined />}
             onClick={handleLogout}
