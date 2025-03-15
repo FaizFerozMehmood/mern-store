@@ -12,9 +12,14 @@ function Home() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
+  const [leng, setLeng] = useState();
   const navigate = useNavigate();
   // const [IsHovered,setIsHovered] = useState(false)
+  // const leng = JSON.parse(localStorage.getItem("cartItem"))
+
   useEffect(() => {
+    // console.log("len", leng);
+
     const token =
       localStorage.getItem("UserToken") || localStorage.getItem("AdminToken");
     if (!token) {
@@ -68,8 +73,14 @@ function Home() {
     searchProductFun();
   }, [search]);
 
+  useEffect(() => {
+    const cart = JSON.parse(localStorage.getItem("cartItem")) || [];
+    setLeng(cart.reduce((sum, item) => sum + item.quantity, 0));
+  }, []);
+
   const handleAddToCart = (id) => {
     let cart = JSON.parse(localStorage.getItem("cartItem")) || [];
+    console.log("cart", cart.length);
     let existItem = cart.find((item) => item.id === id);
     if (existItem) {
       existItem.quantity += 1;
@@ -77,11 +88,12 @@ function Home() {
       cart.push({ id, quantity: 1 });
     }
     localStorage.setItem("cartItem", JSON.stringify(cart));
+    setLeng(cart.reduce((sum, item) => sum + item.quantity, 0));
   };
 
   return (
     <div>
-      <Navbar />
+      <Navbar leng={leng} />
       <div
         style={{
           padding: "20px",
@@ -112,7 +124,6 @@ function Home() {
             data.map((product) => (
               <Col key={product._id} xs={24} sm={12} md={8} lg={6}>
                 <Card
-                  // hoverable
                   cover={
                     <img
                       alt={product.title}
@@ -138,9 +149,6 @@ function Home() {
                     }}
                   >
                     <button
-                      // className="my-button"
-                      // onMouseEnter={() => setIsHovered(true)}
-                      // onMouseLeave={() => setIsHovered(false)}
                       onClick={() => handleAddToCart(product._id)}
                       style={{
                         marginTop: "20px",

@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
-import { DeleteOutlined, LogoutOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import axios from "axios";
-import { Button, Card, Col, Row, Typography, Spin } from "antd";
+import { Button, Card, Col, Row, Typography, Spin, Modal, message } from "antd";
 import { url } from "../api/API";
 import Navbar from "./AdminNav";
 
@@ -12,12 +10,10 @@ const { Title, Text } = Typography;
 const ProductCart = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const getProducts = async () => {
     try {
       const token = localStorage.getItem("AdminToken");
-
       if (!token) {
         console.error("No token found for GET request!");
         return;
@@ -40,11 +36,8 @@ const ProductCart = () => {
     getProducts();
   }, []);
 
-  
-
   const handleDelete = async (id) => {
     const token = localStorage.getItem("AdminToken");
-
     if (!token) {
       console.error("No token found for DELETE request!");
       return;
@@ -55,17 +48,28 @@ const ProductCart = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
+      message.success("Product deleted successfully!");
       getProducts();
     } catch (error) {
       console.error("Error deleting product:", error.response?.data || error);
+      message.error("Failed to delete product.");
     }
   };
 
-  return (
+  const showDeleteConfirm = (id) => {
+    Modal.confirm({
+      title: "Are you sure you want to delete this product?",
+      content: "This action cannot be undone.",
+      okText: "Yes, Delete",
+      okType: "danger",
+      cancelText: "Cancel",
+      onOk: () => handleDelete(id),
+    });
+  };
 
-    <div style={{ margin:"0px", textAlign: "center" }}>
-      <Navbar/>
-     
+  return (
+    <div style={{}}>
+      <Navbar />
 
       <Row gutter={[16, 16]} justify="center">
         {loading ? (
@@ -79,29 +83,69 @@ const ProductCart = () => {
                   <img
                     alt={product.title}
                     src={product.image}
-                    style={{ height: "200px", objectFit: "cover" }}
+                    style={{
+                      height: "200px",
+                      objectFit: "cover",
+                      borderTopLeftRadius: "10px",
+                      borderTopRightRadius: "10px",
+                    }}
                   />
                 }
-                style={{ borderRadius: "10px", overflow: "hidden" }}
+                style={{
+                  borderRadius: "10px",
+                  overflow: "hidden",
+                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+                  transition: "transform 0.2s",
+                }}
+                bodyStyle={{ padding: "16px" }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.02)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
               >
-                <Title level={4}>{product.title}</Title>
-                <Text strong style={{ display: "block", marginBottom: "10px" }}>
+                <Title
+                  level={4}
+                  style={{
+                    fontSize: "18px",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {product.title}
+                </Title>
+                <Text
+                  strong
+                  style={{
+                    display: "block",
+                    marginBottom: "10px",
+                    fontSize: "16px",
+                  }}
+                >
                   ${product.price}
                 </Text>
-                <Text type="secondary">{product.des}</Text>
+                <Text
+                  type="secondary"
+                  style={{ fontSize: "14px", wordBreak: "break-word" }}
+                >
+                  {product.des}
+                </Text>
                 <div
                   style={{
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
+                    marginTop: "10px",
                   }}
                 >
                   <Button
                     type="text"
                     danger
                     icon={<DeleteOutlined />}
-                    onClick={() => handleDelete(product._id)}
-                    style={{ marginTop: "20px", fontSize: "22px" }}
+                    onClick={() => showDeleteConfirm(product._id)}
+                    style={{ fontSize: "22px" }}
                   />
                 </div>
               </Card>

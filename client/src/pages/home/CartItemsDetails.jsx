@@ -9,6 +9,7 @@ import {
 } from "@ant-design/icons";
 import Cookies from "js-cookie";
 import { Button, Table, Typography, message, Input } from "antd";
+import Navbar from "./Navbar";
 
 const { Title, Text } = Typography;
 
@@ -187,30 +188,37 @@ function CartItemsDetails() {
           quantity: 1,
         };
         return (
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <MinusSquareOutlined
-              onClick={() => handleQuantityChange(record._id, "decrease")}
-              style={{
-                fontSize: "20px",
-                cursor: "pointer",
-                marginRight: "10px",
-              }}
-            />
-            <Text>{cartItem.quantity}</Text>
-            <PlusSquareOutlined
-              onClick={() => handleQuantityChange(record._id, "increase")}
-              style={{
-                fontSize: "20px",
-                cursor: "pointer",
-                marginLeft: "10px",
-              }}
-            />
-            <Button
-              type="text"
-              icon={<DeleteOutlined />}
-              onClick={() => onRemove(record._id)}
-              danger
-            />
+          <div
+            style={{
+              margin: "0px",
+            }}
+          >
+            {/* <Navbar/> */}
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <MinusSquareOutlined
+                onClick={() => handleQuantityChange(record._id, "decrease")}
+                style={{
+                  fontSize: "20px",
+                  cursor: "pointer",
+                  marginRight: "10px",
+                }}
+              />
+              <Text>{cartItem.quantity}</Text>
+              <PlusSquareOutlined
+                onClick={() => handleQuantityChange(record._id, "increase")}
+                style={{
+                  fontSize: "20px",
+                  cursor: "pointer",
+                  marginLeft: "10px",
+                }}
+              />
+              <Button
+                type="text"
+                icon={<DeleteOutlined />}
+                onClick={() => onRemove(record._id)}
+                danger
+              />
+            </div>
           </div>
         );
       },
@@ -219,9 +227,24 @@ function CartItemsDetails() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <Button type="primary" onClick={handleContinueShopping}>
-        Continue Shopping
-      </Button>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+        }}
+      >
+        <Button
+          style={{
+            backgroundColor: "black",
+            color: "white",
+            borderRadius: "5px",
+            padding: "20px ",
+          }}
+          onClick={handleContinueShopping}
+        >
+          Continue Shopping
+        </Button>
+      </div>
 
       <Table
         dataSource={items}
@@ -261,14 +284,25 @@ function CartItemsDetails() {
           style={{ margin: "10px 0" }}
         />
       </div>
-
-      <Button
-        type="primary"
-        onClick={handleCustomerDetails}
-        style={{ marginTop: "20px" }}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
       >
-        Submit Order
-      </Button>
+        <Button
+          onClick={handleCustomerDetails}
+          style={{
+            marginTop: "20px",
+            padding: "20px 100px",
+
+            backgroundColor: "black",
+            color: "white",
+          }}
+        >
+          Submit Order
+        </Button>
+      </div>
     </div>
   );
 }
