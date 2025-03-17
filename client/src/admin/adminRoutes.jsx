@@ -7,7 +7,6 @@ const AdminProtectedRoutes = ({children})=>{
     const userdata = Cookies.get("userInfo")
     ? JSON.parse(Cookies.get("userInfo"))
     : null;
-    // const userInfo = Cookies.get("userInfo") ? JSON.parse(Cookies.get("userInfo")) : null;
 
   console.log("userdata", userdata.role);
   if(!userdata || userdata.role !=="admin"){

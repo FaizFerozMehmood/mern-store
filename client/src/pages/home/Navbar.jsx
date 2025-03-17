@@ -6,18 +6,17 @@ import { useNavigate } from "react-router-dom";
 
 const { Header } = Layout;
 
-const Navbar = ({leng}) => {
+const Navbar = ({ leng }) => {
   const [cartCount, setCartCount] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem("cartItem")) || [];
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    
-    console.log("totaal items",totalItems);
-    
+
+    console.log("totaal items", totalItems);
+
     setCartCount(totalItems);
-    
   }, [leng]);
 
   const handleNavigation = (e) => {
@@ -27,9 +26,7 @@ const Navbar = ({leng}) => {
 
   const handleCartClick = (e) => {
     e.preventDefault();
-    // if(cartCount.length ==0){
-    //  return alert("Add something & try to navigate!")
-    // }
+
     navigate("/cartItemsPage");
   };
 

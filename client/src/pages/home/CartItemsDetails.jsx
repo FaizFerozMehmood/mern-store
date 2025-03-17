@@ -200,7 +200,7 @@ function CartItemsDetails() {
                 style={{
                   fontSize: "20px",
                   cursor: "pointer",
-                  marginRight: "10px",
+                  marginRight: "3px",
                 }}
               />
               <Text>{cartItem.quantity}</Text>
@@ -209,7 +209,7 @@ function CartItemsDetails() {
                 style={{
                   fontSize: "20px",
                   cursor: "pointer",
-                  marginLeft: "10px",
+                  marginLeft:"3px" ,
                 }}
               />
               <Button
