@@ -9,9 +9,6 @@ import Navbar from "./Navbar";
 const { Title, Text } = Typography;
 
 function Home() {
-
-  
-    
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
@@ -19,7 +16,6 @@ function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-
     const token =
       localStorage.getItem("UserToken") || localStorage.getItem("AdminToken");
     if (!token) {
