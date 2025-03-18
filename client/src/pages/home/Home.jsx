@@ -9,16 +9,16 @@ import Navbar from "./Navbar";
 const { Title, Text } = Typography;
 
 function Home() {
+
+  
+    
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [leng, setLeng] = useState();
   const navigate = useNavigate();
-  // const [IsHovered,setIsHovered] = useState(false)
-  // const leng = JSON.parse(localStorage.getItem("cartItem"))
 
   useEffect(() => {
-    // console.log("len", leng);
 
     const token =
       localStorage.getItem("UserToken") || localStorage.getItem("AdminToken");
