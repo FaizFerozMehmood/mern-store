@@ -17,10 +17,20 @@ const PORT = process.env.PORT
 connectDb()
 const app = express()
 app.use(express.json());
-app.use(cors({
-    origin:"http://localhost:5173",
-    credentials: true,
-}))
+// app.use(cors({
+//     // origin:"http://localhost:5173",
+//     credentials: true,
+// }))
+
+app.use(
+    cors({
+      // origin: 'http://localhost:5173',
+      origin :"https://mern-store-wens.vercel.app/",
+      methods: ['GET', 'POST', 'PUT', 'DELETE'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+    })
+  );
+  app.options('*', cors());
 
 app.use("/api/auth",userAuth)
 app.use("/admin", adminRoutes)
