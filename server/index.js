@@ -29,7 +29,7 @@ app.use(
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
       allowedHeaders: ['Content-Type', 'Authorization'],
     })
-  );
+  );      
   app.options('*', cors());
 
 app.use("/api/auth",userAuth)
