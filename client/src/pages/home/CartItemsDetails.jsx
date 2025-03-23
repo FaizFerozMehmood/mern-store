@@ -85,6 +85,7 @@ function CartItemsDetails() {
     const updatedCart = cart.filter((item) => item.id !== id);
     localStorage.setItem("cartItem", JSON.stringify(updatedCart));
     setCart(updatedCart);
+    fetchCartDetails();
   };
 
   const totalPrice = useMemo(() => {
@@ -146,11 +147,16 @@ function CartItemsDetails() {
         }
       );
 
-      message.success("Order placed successfully!");
-      localStorage.removeItem("cartItem");
-      setCart([]);
-      setItems([]);
-      navigate("/checkorder");
+      setTimeout(() => {
+        message.success(
+          "Thank you for placing your order! You will receive a confirmation call shortly before delivery.",
+          9
+        );
+        localStorage.removeItem("cartItem");
+        setCart([]);
+        setItems([]);
+        navigate("/userOrder");
+      }, 2000);
     } catch (error) {
       console.error(
         "Error placing order",
@@ -209,7 +215,7 @@ function CartItemsDetails() {
                 style={{
                   fontSize: "20px",
                   cursor: "pointer",
-                  marginLeft:"3px" ,
+                  marginLeft: "3px",
                 }}
               />
               <Button
@@ -246,13 +252,15 @@ function CartItemsDetails() {
         </Button>
       </div>
 
-      <Table
-        dataSource={items}
-        columns={columns}
-        rowKey="_id"
-        pagination={false}
-        style={{ marginTop: "20px" }}
-      />
+      <div style={{ overflowX: "auto" }}>
+        <Table
+          dataSource={items}
+          columns={columns}
+          rowKey="_id"
+          pagination={false}
+          style={{ marginTop: "20px", minWidth: "600px" }}
+        />
+      </div>
 
       <Title level={3} style={{ marginTop: "20px" }}>
         Total: ${totalPrice.toFixed(2)}

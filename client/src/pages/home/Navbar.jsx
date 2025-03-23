@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Button, Layout, Menu, Space, Avatar, Badge } from "antd";
-import { LogoutOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { Button, Layout, Menu, Avatar, Badge, Drawer } from "antd";
+import {
+  LogoutOutlined,
+  ShoppingCartOutlined,
+  MenuOutlined,
+} from "@ant-design/icons";
 import cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
@@ -8,25 +12,21 @@ const { Header } = Layout;
 
 const Navbar = ({ leng }) => {
   const [cartCount, setCartCount] = useState(0);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem("cartItem")) || [];
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-
-    console.log("totaal items", totalItems);
-
     setCartCount(totalItems);
   }, [leng]);
 
   const handleNavigation = (e) => {
-    e.domEvent.preventDefault();
     navigate(e.key);
+    setIsDrawerOpen(false); // Close drawer after clicking a menu item
   };
 
-  const handleCartClick = (e) => {
-    e.preventDefault();
-
+  const handleCartClick = () => {
     navigate("/cartItemsPage");
   };
 
@@ -47,31 +47,45 @@ const Navbar = ({ leng }) => {
           display: "flex",
           alignItems: "center",
           backgroundColor: "rgba(228, 237, 230)",
+          padding: "0 15px",
         }}
       >
+        {/* Mobile Menu Button */}
+        <Button
+          type="text"
+          icon={<MenuOutlined />}
+          onClick={() => setIsDrawerOpen(true)}
+          style={{
+            display: "none",
+            fontSize: "20px",
+            marginBottom: "30px",
+          }}
+          className="menu-button"
+        />
+
         {/* Logo */}
         <div
-          className="logo"
           style={{
-            backgroundColor: "rgba(228, 237, 230)",
             color: "black",
             fontSize: "20px",
             fontWeight: "bold",
-            marginRight: "20px",
+            flex: 1,
+            textAlign: "center",
           }}
         >
           MyStore
         </div>
 
+        {/* Desktop Menu */}
         <Menu
           mode="horizontal"
           defaultSelectedKeys={["/"]}
           onClick={handleNavigation}
           style={{
-            flex: 1,
-            minWidth: 0,
+            flex: 3,
             backgroundColor: "rgba(228, 237, 230)",
           }}
+          className="desktop-menu"
           items={[
             { key: "/", label: "Home" },
             { key: "/userOrder", label: "Order" },
@@ -80,22 +94,12 @@ const Navbar = ({ leng }) => {
           ]}
         />
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "20px",
-          }}
-        >
-          <Button
-            type="text"
-            onClick={handleCartClick}
-            style={{ cursor: "pointer", border: "none" }}
-          >
+        {/* Cart and Logout */}
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <Button type="text" onClick={handleCartClick}>
             <Badge count={cartCount} showZero>
               <Avatar
-                style={{ cursor: "pointer", backgroundColor: "black" }}
+                style={{ backgroundColor: "black" }}
                 shape="square"
                 size="middle"
                 icon={<ShoppingCartOutlined />}
@@ -116,6 +120,39 @@ const Navbar = ({ leng }) => {
           </Button>
         </div>
       </Header>
+
+      {/* Mobile Drawer Menu */}
+      <Drawer
+        title="Menu"
+        placement="left"
+        onClose={() => setIsDrawerOpen(false)}
+        open={isDrawerOpen}
+      >
+        <Menu
+          mode="vertical"
+          onClick={handleNavigation}
+          items={[
+            { key: "/", label: "Home" },
+            { key: "/userOrder", label: "Order" },
+            { key: "/services", label: "Services" },
+            { key: "/contact", label: "Contact" },
+          ]}
+        />
+      </Drawer>
+
+      {/* CSS for responsiveness */}
+      <style>
+        {`
+          @media (max-width: 768px) {
+            .desktop-menu {
+              display: none;
+            }
+            .menu-button {
+              display: block !important;
+            }
+          }
+        `}
+      </style>
     </Layout>
   );
 };

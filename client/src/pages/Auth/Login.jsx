@@ -14,6 +14,8 @@ const Login = () => {
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
+    const savedUserName = localStorage.getItem("userName")
+    console.log("savedUserName in local storage ",savedUserName);
     console.log("Received values of form: ", values);
     setIsLoading(true);
 
@@ -39,7 +41,7 @@ const Login = () => {
       }
 
       if (response.status === 200) {
-        toast.success(response.data?.msg);
+        toast.success(`Welcome, ${savedUserName}!😘`);
 
         setTimeout(() => {
           const userInfoString = Cookies.get("userInfo");

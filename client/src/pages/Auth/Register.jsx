@@ -19,6 +19,9 @@ function Register() {
       email: values.email,
       password: values.password,
     };
+    localStorage.setItem("userName",regiserData.name)
+
+    
     try {
       const response = await axios.post(url.register, regiserData);
       toast.success(response.data?.msg);
