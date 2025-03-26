@@ -13,6 +13,8 @@ export const url = {
   updateOrderStatus: `${BASE_URL}api/orders`,
   getuserOrder: `${BASE_URL}api/orders/myorder`,
   searchProducts: `${BASE_URL}products/search`,
+  findByCategories:`${BASE_URL}products/findCategory`
+  // http://localhost:5000/products/findCategory?category=Perfumes
 };
 
 // http://localhost:5000/api/files/upload

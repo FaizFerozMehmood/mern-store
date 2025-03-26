@@ -49,3 +49,25 @@ export const searchProducts = async (req, res) => {
     return sendResponse(res, 500, null, true, "Internal server error!");
   }
 };
+
+export const findProductCategories = async (req,res) =>{
+  try {
+    const category = req.query.category
+    console.log("category",category)
+    const filter = {}
+    if(category){
+      filter.category = category
+    }
+    console.log("filter",filter);
+    
+    const fileteredCatgory = await Product.find({category:category});
+    console.log("filtered Category",fileteredCatgory);
+    if(fileteredCatgory.length ===0){
+      return sendResponse(res, 404 , null , true , "No product category found!")
+    }
+    sendResponse(res, 200,fileteredCatgory,false,"product category fetch successfully!" )
+  } catch (error) {
+    return sendResponse(res, 500, null, true, "Internal server error!");
+  }
+  
+}

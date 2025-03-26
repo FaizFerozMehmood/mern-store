@@ -14,7 +14,10 @@ function Home() {
   const [search, setSearch] = useState("");
   const [leng, setLeng] = useState();
   const navigate = useNavigate();
-// abc to push changes on github ...
+  const [selectedValue, setSelectedValue] = useState();
+  // abc to push changes on github ...
+  console.log("selected",selectedValue);
+  
   useEffect(() => {
     const token =
       localStorage.getItem("UserToken") || localStorage.getItem("AdminToken");
@@ -36,6 +39,24 @@ function Home() {
       setLoading(false);
     }
   };
+  const handleChange = (e) => {
+    console.log(e.target.value);
+    const newValue = e.target.value
+    setSelectedValue(newValue);
+    handleCategoryChanges(newValue)
+  };
+   const handleCategoryChanges =  async(category)=>{
+    if(!category){
+      return;
+    }
+    const token = localStorage.getItem("UserToken")
+    const response =await axios.get(url.findByCategories,{
+      headers: { Authorization: `Bearer ${token}` },
+      params: { category: category }
+    })
+    console.log("response category",response);
+    
+   }
 
   const searchProductFun = async () => {
     if (!search.trim()) {
@@ -113,6 +134,25 @@ function Home() {
             placeholder="Search products"
           />
         </div>
+
+        <div>
+          <label htmlFor="dropdown">Choose any category to find: </label>
+          <select id="dropdown" value={selectedValue} onChange={handleChange}>
+            <option value="">Select</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Books">Books</option>
+            <option value="Dry Fruits">Dry Fruits</option>
+            <option value="Furniture">Furniture</option>
+            <option value="Toys">Toys</option>
+            <option value="Makeup">Makeup</option>
+            <option value="Perfumes">Perfumes</option>
+            <option value="Headphones">Headphones</option>
+            <option value="Headphones">Headphones</option>
+            <option value="Educational & Academic Books">Educational & Academic Books</option>
+          </select>
+        </div>
+        
+     
         <Row gutter={[16, 16]} justify="center">
           {loading ? (
             <Spin size="large" />
