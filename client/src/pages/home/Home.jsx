@@ -116,102 +116,145 @@ const handleReset = ()=>{
     <div>
       <Navbar leng={leng} />
       <div
-        style={{
-          padding: "20px",
-          textAlign: "center",
-          backgroundColor: "rgba(245, 249, 250)",
-        }}
-      >
-        <div
-          style={{
-            marginTop: "60px",
-            display: "flex",
-            justifyContent: "center",
-            marginBottom: "20px",
-          }}
-        >
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            style={{ padding: "10px 60px", borderRadius: "3px" }}
-            type="search"
-            placeholder="Search products"
-          />
-        </div>
+  style={{
+    marginTop:"60px",
+    padding: "20px",
+    textAlign: "center",
+    backgroundColor: "rgba(245, 249, 250)",
+  }}
+>
+  <div
+    style={{
+      maxWidth: "600px",
+      margin: "0 auto",
+      padding: "20px",
+      backgroundColor: "white",
+      borderRadius: "10px",
+      boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+      display: "flex",
+      flexWrap: "wrap",
+      justifyContent: "center",
+      alignItems: "center",
+      gap: "10px",
+    }}
+  >
+    <input
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      style={{
+        padding: "10px",
+        borderRadius: "5px",
+        flex: "1",
+        minWidth: "200px",
+        maxWidth: "250px",
+        border: "1px solid #ccc",
+      }}
+      type="search"
+      placeholder="Search products"
+    />
 
-        <div>
-          <label htmlFor="dropdown">Choose any category to find: </label>
-          <select id="dropdown" value={selectedValue} onChange={handleChange}>
-            <option value="">Select</option>
-            <option value="Electronics">Electronics</option>
-            <option value="Books">Books</option>
-            <option value="Dry Fruits">Dry Fruits</option>
-            <option value="Furniture">Furniture</option>
-            <option value="Toys">Toys</option>
-            <option value="Makeup">Makeup</option>
-            <option value="Perfumes">Perfumes</option>
-            <option value="Headphones">Headphones</option>
-            <option value="Educational & Academic Books">Educational & Academic Books</option>
-          </select>
-          <button onClick={handleReset}>Reset</button>
-        </div>
-        
-     
-        <Row gutter={[16, 16]} justify="center">
-          {loading ? (
-            <Spin size="large" />
-          ) : data.length > 0 ? (
-            data.map((product) => (
-              <Col key={product._id} xs={24} sm={12} md={8} lg={6}>
-                <Card
-                  cover={
-                    <img
-                      alt={product.title}
-                      src={product.image}
-                      style={{ height: "200px", objectFit: "cover" }}
-                    />
-                  }
-                  style={{ borderRadius: "10px", overflow: "hidden" }}
-                >
-                  <Title level={4}>{product.title}</Title>
-                  <Text
-                    strong
-                    style={{ display: "block", marginBottom: "10px" }}
-                  >
-                    ${product.price}
-                  </Text>
-                  <Text type="secondary">{product.des}</Text>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      width: "100%",
-                    }}
-                  >
-                    <button
-                      onClick={() => handleAddToCart(product._id)}
-                      style={{
-                        marginTop: "20px",
-                        fontSize: "20px",
-                        color: "white",
-                        backgroundColor: "black",
-                        cursor: "pointer",
-                        padding: "5px 40px",
-                        border: "none",
-                        borderRadius: "5px",
-                      }}
-                    >
-                      Add to cart
-                    </button>
-                  </div>
-                </Card>
-              </Col>
-            ))
-          ) : (
-            <Text type="danger">No products found!</Text>
-          )}
-        </Row>
-      </div>
+    <select
+      id="dropdown"
+      value={selectedValue}
+      onChange={handleChange}
+      style={{
+        padding: "10px",
+        borderRadius: "5px",
+        border: "1px solid #ccc",
+        minWidth: "150px",
+      }}
+    >
+      <option value="">Choose a category</option>
+      <option value="Electronics">Electronics</option>
+      <option value="Books">Books</option>
+      <option value="Dry Fruits">Dry Fruits</option>
+      <option value="Furniture">Furniture</option>
+      <option value="Toys">Toys</option>
+      <option value="Makeup">Makeup</option>
+      <option value="Perfumes">Perfumes</option>
+      <option value="Headphones">Headphones</option>
+      <option value="Educational & Academic Books">
+        Educational & Academic Books
+      </option>
+    </select>
+
+    <button
+      onClick={handleReset}
+      style={{
+        padding: "10px 20px",
+        borderRadius: "5px",
+        backgroundColor: "black",
+        color: "white",
+        border: "none",
+        cursor: "pointer",
+        fontSize: "14px",
+      }}
+    >
+      Reset
+    </button>
+  </div>
+
+  <Row gutter={[16, 16]} justify="center" style={{ marginTop: "20px" }}>
+    {loading ? (
+      <Spin size="large" />
+    ) : data.length > 0 ? (
+      data.map((product) => (
+        <Col key={product._id} xs={24} sm={12} md={8} lg={6}>
+          <Card
+            cover={
+              <img
+                alt={product.title}
+                src={
+                  product.image ||
+                  "https://images.unsplash.com/photo-1513589669142-c71a6de1ed20?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZHVtbXklMjBpbWFnYWV8ZW58MHx8MHx8fDA%3D"
+                }
+                style={{ height: "200px", objectFit: "cover" }}
+              />
+            }
+            style={{
+              borderRadius: "10px",
+              overflow: "hidden",
+              textAlign: "center",
+            }}
+          >
+            <Title level={4}>{product.title}</Title>
+            <Text strong style={{ display: "block", marginBottom: "10px" }}>
+              ${product.price}
+            </Text>
+            <Text type="secondary">{product.des}</Text>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                width: "100%",
+              }}
+            >
+              <button
+                onClick={() => handleAddToCart(product._id)}
+                style={{
+                  marginTop: "20px",
+                  fontSize: "16px",
+                  color: "white",
+                  backgroundColor: "black",
+                  cursor: "pointer",
+                  padding: "10px 20px",
+                  border: "none",
+                  borderRadius: "5px",
+                }}
+              >
+                Add to cart
+              </button>
+            </div>
+          </Card>
+        </Col>
+      ))
+    ) : (
+      <Text type="danger">No products found!</Text>
+    )}
+  </Row>
+</div>
+
+
     </div>
   );
 }
