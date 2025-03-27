@@ -54,10 +54,14 @@ function Home() {
       headers: { Authorization: `Bearer ${token}` },
       params: { category: category }
     })
-    console.log("response category",response);
+    console.log("response category",response.data?.data);
+    setData(response.data?.data)
     
    }
-
+const handleReset = ()=>{
+  setData([])
+  getProducts()
+}
   const searchProductFun = async () => {
     if (!search.trim()) {
       getProducts();
@@ -147,9 +151,9 @@ function Home() {
             <option value="Makeup">Makeup</option>
             <option value="Perfumes">Perfumes</option>
             <option value="Headphones">Headphones</option>
-            <option value="Headphones">Headphones</option>
             <option value="Educational & Academic Books">Educational & Academic Books</option>
           </select>
+          <button onClick={handleReset}>Reset</button>
         </div>
         
      
