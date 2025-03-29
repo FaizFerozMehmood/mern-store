@@ -158,10 +158,7 @@ function CartItemsDetails() {
         navigate("/userOrder");
       }, 2000);
     } catch (error) {
-      console.error(
-        "Error placing order",
-        error.response?.data || error.message
-      );
+      
       message.error(error.response?.data?.message || "Failed to place order");
     }
   };
@@ -204,7 +201,7 @@ function CartItemsDetails() {
               <MinusSquareOutlined
                 onClick={() => handleQuantityChange(record._id, "decrease")}
                 style={{
-                  fontSize: "20px",
+                  fontSize: "25px",
                   cursor: "pointer",
                   marginRight: "3px",
                 }}
@@ -213,14 +210,20 @@ function CartItemsDetails() {
               <PlusSquareOutlined
                 onClick={() => handleQuantityChange(record._id, "increase")}
                 style={{
-                  fontSize: "20px",
+                  fontSize: "25px",
                   cursor: "pointer",
                   marginLeft: "3px",
                 }}
               />
               <Button
                 type="text"
-                icon={<DeleteOutlined />}
+                icon={
+                  <DeleteOutlined
+                    style={{
+                      fontSize: "25px",
+                    }}
+                  />
+                }
                 onClick={() => onRemove(record._id)}
                 danger
               />

@@ -15,8 +15,8 @@ const Login = () => {
 
   const onFinish = async (values) => {
     const savedUserName = localStorage.getItem("userName")
-    console.log("savedUserName in local storage ",savedUserName);
-    console.log("Received values of form: ", values);
+    // console.log("savedUserName in local storage ",savedUserName);
+    // console.log("Received values of form: ", values);
     setIsLoading(true);
 
     const loginData = {
@@ -26,7 +26,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(url.login, loginData);
-      console.log("Token:", response.data?.data?.token);
+      // console.log("Token:", response.data?.data?.token);
 
       form.resetFields();
 
@@ -41,17 +41,14 @@ const Login = () => {
       }
 
       if (response.status === 200) {
-        toast.success(`Welcome, ${savedUserName}!😘`);
+        toast.success(`Welcome, ${savedUserName ? savedUserName :"Faiz"}!😘`);
 
         setTimeout(() => {
           const userInfoString = Cookies.get("userInfo");
           if (userInfoString) {
             try {
               const userInfo = JSON.parse(userInfoString);
-              // console.log(
-              //   "Navigating to:",
-              //   userInfo.role === "admin" ? "/admin" : "/cartItemsPage"
-              // );
+              
 
               if (userInfo.role === "admin") {
                 navigate("/admin");   
@@ -59,7 +56,7 @@ const Login = () => {
                 navigate("/");
               }
             } catch (error) {
-              console.error("Error parsing user info:", error);
+              // console.error("Error parsing user info:", error);
               toast.error("Failed to parse user information.");
             }
           } else {

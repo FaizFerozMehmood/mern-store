@@ -12,7 +12,7 @@ function Register() {
   const navigate = useNavigate();
 
   const onFinish = async (values) => {
-    console.log("received values of form: ", values);
+    // console.log("received values of form: ", values);
     setIsLoading(true);
     const regiserData = {
       name: values.name,

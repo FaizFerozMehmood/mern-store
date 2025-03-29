@@ -82,7 +82,17 @@ function UserOrders() {
         {loading ? (
           <Spin size="large" style={{ display: "block", margin: "20px auto" }} />
         ) : orders.length === 0 ? (
-          <p>No Orders Found</p>
+          <div style={{
+            display:"flex",
+            justifyContent:"center",
+            marginTop:"190px"
+          }}>
+          <p style={{
+            fontFamily:"monospace",
+            fontSize:"15px"
+          }}>No Orders Found, Order now!</p>
+
+          </div>
         ) : (
           <Table columns={columns} dataSource={orders} rowKey="_id" />
         )}

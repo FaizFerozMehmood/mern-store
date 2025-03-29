@@ -15,7 +15,7 @@ const ProductCart = () => {
     try {
       const token = localStorage.getItem("AdminToken");
       if (!token) {
-        console.error("No token found for GET request!");
+        // console.error("No token found for GET request!");
         return;
       }
 
@@ -26,7 +26,7 @@ const ProductCart = () => {
 
       setData(response.data?.data);
     } catch (error) {
-      console.error("Error fetching products:", error.response?.data || error);
+      // console.error("Error fetching products:", error.response?.data || error);
     } finally {
       setLoading(false);
     }
@@ -39,7 +39,7 @@ const ProductCart = () => {
   const handleDelete = async (id) => {
     const token = localStorage.getItem("AdminToken");
     if (!token) {
-      console.error("No token found for DELETE request!");
+      // console.error("No token found for DELETE request!");
       return;
     }
 
@@ -51,7 +51,7 @@ const ProductCart = () => {
       message.success("Product deleted successfully!");
       getProducts();
     } catch (error) {
-      console.error("Error deleting product:", error.response?.data || error);
+      // console.error("Error deleting product:", error.response?.data || error);
       message.error("Failed to delete product.");
     }
   };

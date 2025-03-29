@@ -16,7 +16,7 @@ function Home() {
   const navigate = useNavigate();
   const [selectedValue, setSelectedValue] = useState();
   // abc to push changes on github ...
-  console.log("selected",selectedValue);
+  // console.log("selected",selectedValue);
   
   useEffect(() => {
     const token =
@@ -34,13 +34,13 @@ function Home() {
       });
       setData(response.data?.data);
     } catch (error) {
-      console.log("Error fetching products:", error);
+      // console.log("Error fetching products:", error);
     } finally {
       setLoading(false);
     }
   };
   const handleChange = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     const newValue = e.target.value
     setSelectedValue(newValue);
     handleCategoryChanges(newValue)
@@ -54,7 +54,7 @@ function Home() {
       headers: { Authorization: `Bearer ${token}` },
       params: { category: category }
     })
-    console.log("response category",response.data?.data);
+    // console.log("response category",response.data?.data);
     setData(response.data?.data)
     
    }
@@ -79,7 +79,7 @@ const handleReset = ()=>{
       );
       setData(response.data?.data || []);
     } catch (error) {
-      console.log("Error searching products:", error);
+      // console.log("Error searching products:", error);
       setData([]);
     } finally {
       setLoading(false);
@@ -101,7 +101,7 @@ const handleReset = ()=>{
 
   const handleAddToCart = (id) => {
     let cart = JSON.parse(localStorage.getItem("cartItem")) || [];
-    console.log("cart", cart.length);
+    // console.log("cart", cart.length);
     let existItem = cart.find((item) => item.id === id);
     if (existItem) {
       existItem.quantity += 1;

@@ -51,7 +51,7 @@ const ProductForm = () => {
         setProduct((prev) => ({ ...prev, image: response.data.data }));
       }
     } catch (error) {
-      console.error("Image upload failed", error);
+      // console.error("Image upload failed", error);
     }
     setLoading(false);
   };
@@ -77,7 +77,7 @@ const ProductForm = () => {
       });
       setFile(null);
     } catch (error) {
-      console.error("Error adding product", error);
+      // console.error("Error adding product", error);
     }
   };
 
