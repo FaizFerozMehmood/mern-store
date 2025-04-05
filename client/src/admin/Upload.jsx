@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { url } from "../api/API";
 import AdminNav from "./AdminNav.jsx";
-
+    
 const ProductForm = () => {
   const [product, setProduct] = useState({
     productName: "",
@@ -109,9 +109,10 @@ const ProductForm = () => {
           border: "1px solid #ddd",
           borderRadius: "10px",
           boxShadow: "2px 2px 10px rgba(0,0,0,0.1)",
+          marginTop:"10px"
         }}
       >
-        <h2 style={{ textAlign: "center" }}>Add Product</h2>
+        <h2 style={{ textAlign: "center" }}>Add New Product in your Website</h2>
         <form
           onSubmit={handleSubmit}
           style={{ display: "flex", flexDirection: "column" }}

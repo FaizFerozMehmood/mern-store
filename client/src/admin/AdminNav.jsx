@@ -35,7 +35,7 @@ const Navbar = () => {
     { key: "2", label: <Link to="/admin">Upload Products</Link> },
     { key: "3", label: <Link to="/adminProduct">Products</Link> },
     { key: "4", label: <Link to="#">Services</Link> },
-    { key: "5", label: <Link to="#">Contact</Link> },
+    { key: "5", label: <Link to="/contact">Contact</Link> },
   ];
 
   return (
