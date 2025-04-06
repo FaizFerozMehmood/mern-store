@@ -14,6 +14,7 @@ import {
   Avatar,
   Divider,
 } from "antd";
+import Cookies from "js-cookie";
 import {
   LogoutOutlined,
   ShoppingCartOutlined,
@@ -26,7 +27,6 @@ import {
   DownOutlined,
   ShopOutlined,
 } from "@ant-design/icons";
-import cookies from "js-cookie";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const { Header, Content } = Layout;
@@ -38,6 +38,7 @@ const Navbar = ({ leng }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [name, setName] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const { token } = useToken();
@@ -47,6 +48,15 @@ const Navbar = ({ leng }) => {
   const accentColor = "#ff6b35";
   const headerHeight = 70;
   const isMobile = windowWidth <= 768;
+
+  useEffect(() => {
+    const userData = Cookies.get("userInfo");
+    if (userData) {
+      const userInfo = JSON.parse(userData);
+      console.log("userINfo", userInfo.name);
+      setName(userInfo.name);
+    }
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -98,7 +108,7 @@ const Navbar = ({ leng }) => {
   };
 
   const handleLogout = () => {
-    cookies.remove("userInfo");
+    Cookies.remove("userInfo");
     localStorage.removeItem("UserToken");
     localStorage.removeItem("AdminToken");
     navigate("/login");
@@ -109,7 +119,7 @@ const Navbar = ({ leng }) => {
       { key: "/", label: "Home", icon: <HomeOutlined /> },
       { key: "/userOrder", label: "Order", icon: <ShoppingOutlined /> },
       {
-        key: "/services",
+        key: "#",
         label: "Services",
         icon: <CustomerServiceOutlined />,
       },
@@ -120,7 +130,7 @@ const Navbar = ({ leng }) => {
 
   const userDropdownItems = [
     {
-      key: "profile",
+      key: "#",
       label: "My Profile",
       icon: <UserOutlined />,
       onClick: () => navigate(""),
@@ -376,7 +386,7 @@ const Navbar = ({ leng }) => {
                 <Text strong style={{ display: "block" }}>
                   Welcome
                 </Text>
-                <Text type="secondary">User Account</Text>
+                <Text type="secondary">{name}</Text>
               </div>
             </div>
 
@@ -401,7 +411,7 @@ const Navbar = ({ leng }) => {
                 type="primary"
                 icon={<UserOutlined />}
                 onClick={() => {
-                  navigate("/profile");
+                  navigate("#");
                   setIsDrawerOpen(false);
                 }}
                 style={{

@@ -29,6 +29,8 @@ function GetOrders() {
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  console.log(orders.length);
+  
 
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
@@ -39,11 +41,14 @@ function GetOrders() {
       const response = await axios.get(url.getPlacedOrders, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      // console.log("response",response);
+
       const sortedOrders =
         response.data?.data?.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         ) || [];
       setOrders(sortedOrders);
+      // console.log("orders",orders);
     } catch (error) {
       console.error("Error fetching orders:", error);
     } finally {

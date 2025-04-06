@@ -64,8 +64,6 @@ const loginSchema = Joi.object({
 router.post("/login", async (req, res) => {
   try {
     const { error, value } = loginSchema.validate(req.body);
-    // console.log(error);
-    // console.log(value);
     if (error)
       return sendResponse(res, 400, null, true, error.details[0].message);
     value.email = value.email.toLowerCase();
@@ -87,7 +85,6 @@ router.post("/login", async (req, res) => {
 
     return sendResponse(res, 200, { user, token }, false, "Login successful!");
   } catch (error) {
-    // console.log(error);
     return sendResponse(res, 500, null, true, "internal server error", error);
   }
 });
