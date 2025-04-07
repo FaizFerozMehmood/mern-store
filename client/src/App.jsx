@@ -15,6 +15,7 @@ import AdminNav from "./admin/AdminNav.jsx";
 import UserOrders from "./pages/home/OrderSuccess.jsx";
 import ProductCart from "./admin/ProductCart.jsx";
 import ContactComponent from "./pages/home/Contact.jsx";
+import Dashboard from "./admin/Dashboard.jsx";
 
 function App() {
   // making changes to push to github
@@ -33,6 +34,7 @@ function App() {
           <Route path={"/"} element={<Home />} />
           <Route path={"/cartItemsPage"} element={<CartItemsDetails />} />
           <Route path={"/login"} element={<Login />} />
+          <Route path={"/dashboard"} element={<Dashboard />} />
           <Route path={"/AdminNav"} element={<AdminNav />} />
           <Route path={"/navbar"} element={<Navbar />} />
 

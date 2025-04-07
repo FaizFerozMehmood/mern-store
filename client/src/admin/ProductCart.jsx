@@ -10,6 +10,9 @@ const { Title, Text } = Typography;
 const ProductCart = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  // console.log("data",data.length);
+  localStorage.setItem("totalProducts",data.length)
+  
 
   const getProducts = async () => {
     try {
@@ -65,7 +68,7 @@ const ProductCart = () => {
 
       <div style={{ padding: "20px" }}>
         <Title level={2} style={{ marginBottom: "24px", textAlign: "center" }}>
-          Product Catalog
+          Products
         </Title>
 
         {loading ? (

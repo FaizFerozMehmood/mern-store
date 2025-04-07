@@ -1,16 +1,24 @@
 import sendResponse from "../helpers/sendResponse.js";
 import Product from "../models/productModel.js";
+import User from "../models/userModel.js";
 
 export const addProduct = async (req, res) => {
   //   console.log("request body in", req.body);
 
   try {
-    const { productName,category, image, price, title, des } = req.body;
+    const { productName, category, image, price, title, des } = req.body;
 
-    if (!productName || !category|| !price || !title || !des) {
+    if (!productName || !category || !price || !title || !des) {
       return sendResponse(res, 403, null, true, "All fields are required!");
     }
-    const newProduct = new Product({ productName, category, image, price, title, des });
+    const newProduct = new Product({
+      productName,
+      category,
+      image,
+      price,
+      title,
+      des,
+    });
 
     await newProduct.save();
 
@@ -60,5 +68,19 @@ export const getProduct = async (req, res) => {
   } catch (error) {
     console.log("errror retrieving products ===>  ", error);
     return sendResponse(res, 500, null, true, "Internal server error", error);
+  }
+};
+
+export const getUsers = async (req, res) => {
+  try {
+    const users = await User.find({});
+    console.log("users",users.length);
+    
+    if (!users.length) {
+      return sendResponse(res, 404, null, true, "no users found!");
+    }
+    return sendResponse(res, 200, users, false, "user fetched successfully!");
+  } catch (error) {
+    return sendResponse(res, 500, null, true, "internal server error!");
   }
 };

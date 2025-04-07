@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Space, Tooltip, Button, Row, Col } from "antd";
+import { Typography, Space, Tooltip, Button, Row, Col, Avatar } from "antd";
 import Cookies from "js-cookie";
 import {
   GithubOutlined,
@@ -45,7 +45,7 @@ const ContactComponent = () => {
         const userInfo = JSON.parse(userInfoString);
 
         if (userInfo.role === "admin") {
-          navigate("/admin");
+          navigate("/dashboard");
         } else {
           navigate("/");
         }
@@ -76,6 +76,12 @@ const ContactComponent = () => {
     return "800px";
   };
 
+  const getProfileSize = () => {
+    if (windowWidth <= 480) return 100;
+    if (windowWidth <= 768) return 120;
+    return 140;
+  };
+
   const styles = {
     container: {
       textAlign: "center",
@@ -86,14 +92,31 @@ const ContactComponent = () => {
       width: getContainerWidth(),
       maxWidth: "800px",
       margin: "0 auto",
-      marginTop: windowWidth <= 480 ? "40px" : "80px",
+      marginTop: windowWidth <= 480 ? "60px" : "60px",
       marginBottom: "40px",
     },
-    title: {
+    profileContainer: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
       marginBottom: windowWidth <= 480 ? "20px" : "30px",
+    },
+    profileImage: {
+      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+      border: "3px solid #fff",
+    },
+    title: {
+      marginTop: "15px",
+      marginBottom: windowWidth <= 480 ? "5px" : "10px",
       color: "#1890ff",
       fontWeight: 600,
       fontSize: windowWidth <= 480 ? "24px" : "30px",
+    },
+    subtitle: {
+      color: "#555",
+      fontSize: windowWidth <= 480 ? "14px" : "16px",
+      fontWeight: "500",
+      marginBottom: windowWidth <= 480 ? "15px" : "20px",
     },
     description: {
       fontSize: windowWidth <= 480 ? "14px" : "16px",
@@ -142,7 +165,6 @@ const ContactComponent = () => {
     },
   };
 
-  // Social media data with their respective colors
   const socialMediaData = [
     {
       name: "GitHub",
@@ -184,12 +206,21 @@ const ContactComponent = () => {
 
   return (
     <div style={styles.container}>
-      <Title level={windowWidth <= 480 ? 3 : 2} style={styles.title}>
-        Let's Connect
-      </Title>
+      <div style={styles.profileContainer}>
+        <Avatar 
+          size={getProfileSize()} 
+           src={"/unnamed.jpg"}
+          alt="Faiz Mahmood" 
+          style={styles.profileImage}
+        />
+        <Title level={windowWidth <= 480 ? 3 : 2} style={styles.title}>
+          Faiz Mahmood
+        </Title>
+        <div style={styles.subtitle}>MERN Stack Developer</div>
+      </div>
 
       <Paragraph style={styles.description}>
-        Hi, I'm Faiz Mahmood, a passionate MERN Stack Developer always open for
+        Hi, I'm a passionate developer always open for
         collaboration, new opportunities, and interesting projects. Feel free to
         reach out through any of these platforms.
       </Paragraph>
