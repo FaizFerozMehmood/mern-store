@@ -41,7 +41,7 @@ const Login = () => {
       }
 
       if (response.status === 200) {
-        toast.success(`Welcome, ${savedUserName ? savedUserName :"Faiz"}!😘`);
+        toast.success(`Welcome, ${savedUserName ? savedUserName :""}!😘`);
 
         setTimeout(() => {
           const userInfoString = Cookies.get("userInfo");
@@ -51,7 +51,7 @@ const Login = () => {
               
 
               if (userInfo.role === "admin") {
-                navigate("/admin");   
+                navigate("/dashboard");   
               } else {
                 navigate("/");
               }

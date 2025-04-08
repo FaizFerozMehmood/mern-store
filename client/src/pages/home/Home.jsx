@@ -20,16 +20,20 @@ function Home() {
   // console.log("selected",selectedValue);
   const images = [
     {
-      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRiasAX7KLMDhYh03JHD5GTJxtdrGBKBK23Hw&s",
+      src: "https://images.unsplash.com/photo-1524593656068-fbac72624bb0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fFByZW1pdW0lMjBxdWFsaXR5JTIwY2FzaGV3cyUyMG51dHN8ZW58MHx8MHx8fDA%3D",
       alt: "Image 1 description",
     },
     {
-      src: "https://www.gulahmedshop.com/media/catalog/product/n/a/navy_non-denim_overshirt_224-117-012_9_.jpg?optimize=medium&fit=bounds&height=900&width=600",
+      src: "https://res.cloudinary.com/dyno1fhq3/image/upload/v1739901487/uploads/u2n5sw2fivl1wijztuam.avif",
       alt: "Image 2 description",
     },
     {
       src: "https://scentsnstories.pk/cdn/shop/files/Women_Banner_4bf0849e-2062-4e4f-9aaa-7b4bd49c2e53.webp?v=1725359537&width=1600",
       alt: "Image 3 description",
+    },
+    {
+      src: "https://res.cloudinary.com/dyno1fhq3/image/upload/v1739902341/uploads/i3c2jlyypinnbyplfxn4.webp",
+      alt: "Image 4 description",
     },
   ];
 
@@ -133,7 +137,7 @@ function Home() {
       <div
         style={{
           marginTop: "1px",
-          height: "120px",
+          height: "150px",
         }}
       >
         <Carousel

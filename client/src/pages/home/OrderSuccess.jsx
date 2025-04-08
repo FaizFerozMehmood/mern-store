@@ -24,6 +24,7 @@ import {
 } from "@ant-design/icons";
 import { url } from "../../api/API";
 import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 const { Content } = Layout;
@@ -32,6 +33,10 @@ function UserOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const navigate = useNavigate()
+  const handleContinueShoppingCart=()=>{
+    navigate("/")
+  }
 
   const fetchUserOrders = async () => {
     try {
@@ -201,6 +206,7 @@ function UserOrders() {
       Delivered: <FileSearchOutlined />,
       Cancelled: <ClockCircleOutlined />,
     };
+   
 
     return (
       <Card
@@ -387,6 +393,7 @@ function UserOrders() {
               />
               <Divider style={{ margin: isMobile ? "16px 0" : "24px 0" }} />
               <Button
+              onClick={handleContinueShoppingCart}
                 type="primary"
                 size={isMobile ? "middle" : "large"}
                 icon={<ShoppingCartOutlined />}

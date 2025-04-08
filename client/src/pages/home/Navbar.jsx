@@ -53,7 +53,6 @@ const Navbar = ({ leng }) => {
     const userData = Cookies.get("userInfo");
     if (userData) {
       const userInfo = JSON.parse(userData);
-      console.log("userINfo", userInfo.name);
       setName(userInfo.name);
     }
   }, []);

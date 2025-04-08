@@ -21,7 +21,7 @@ app.use(express.json());
 //     origin:"http://localhost:5173",
 //     credentials: true,
 // }))
-// changes to be committed
+// changes to be committed..
 app.use(
     cors({
       // origin: 'http://localhost:5173/',

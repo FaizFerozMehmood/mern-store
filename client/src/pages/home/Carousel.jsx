@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 const Carousel = ({ images = [], autoPlayInterval = 3000, showDots = true, showArrows = true }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   
-  // Default images if none provided
   const defaultImages = [
     { src: "/api/placeholder/800/400", alt: "Slide 1" },
     { src: "/api/placeholder/800/400", alt: "Slide 2" },
@@ -46,7 +45,7 @@ const Carousel = ({ images = [], autoPlayInterval = 3000, showDots = true, showA
     },
     slidesContainer: {
       position: 'relative',
-      height: '256px' // equivalent to h-64
+      height: '256px' 
     },
     slide: {
       position: 'absolute',
@@ -156,7 +155,6 @@ const Carousel = ({ images = [], autoPlayInterval = 3000, showDots = true, showA
         </>
       )}
       
-      {/* Dots navigation */}
       {showDots && (
         <div style={styles.dotsContainer}>
           {displayImages.map((_, index) => (
