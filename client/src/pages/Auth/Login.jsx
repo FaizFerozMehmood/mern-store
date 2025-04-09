@@ -13,8 +13,9 @@ const Login = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
 
+
   const onFinish = async (values) => {
-    const savedUserName = localStorage.getItem("userName")
+     
     // console.log("savedUserName in local storage ",savedUserName);
     // console.log("Received values of form: ", values);
     setIsLoading(true);
@@ -33,6 +34,7 @@ const Login = () => {
       Cookies.set("userInfo", JSON.stringify(response.data?.data?.user), {
         expires: 7,
       });
+      console.log("Response", response)
 
       if (response.data?.data?.user?.role === "admin") {
         localStorage.setItem("AdminToken", response.data?.data?.token);
@@ -41,7 +43,7 @@ const Login = () => {
       }
 
       if (response.status === 200) {
-        toast.success(`Welcome, ${savedUserName ? savedUserName :""}!😘`);
+        toast.success(`Welcome to the page!`);
 
         setTimeout(() => {
           const userInfoString = Cookies.get("userInfo");

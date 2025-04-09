@@ -16,21 +16,24 @@ import UserOrders from "./pages/home/OrderSuccess.jsx";
 import ProductCart from "./admin/ProductCart.jsx";
 import ContactComponent from "./pages/home/Contact.jsx";
 import Dashboard from "./admin/Dashboard.jsx";
-
+ const token = localStorage.getItem("UserToken");
 function App() {
   // making changes to push to github
 
+  
+
   return (
-    <BrowserRouter>
+    
       <div
-        style={{
-          margin: "0px",
-          padding: "0px",
-          boxSizing: "border-box",
-        }}
+        // style={{
+        //   margin: "0px",
+        //   padding: "0px",
+        //   boxSizing: "border-box",
+        // }}
       >
         <Routes>
-          <Route path={"/register"} element={<Register />} />
+
+          <Route path={"/register"}  element={<Register />} />
           <Route path={"/"} element={<Home />} />
           <Route path={"/cartItemsPage"} element={<CartItemsDetails />} />
           <Route path={"/login"} element={<Login />} />
@@ -53,7 +56,7 @@ function App() {
           />
         </Routes>
       </div>
-    </BrowserRouter>
+   
   );
 }
 

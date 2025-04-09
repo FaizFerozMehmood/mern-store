@@ -16,6 +16,7 @@ function Home() {
   const [leng, setLeng] = useState();
   const navigate = useNavigate();
   const [selectedValue, setSelectedValue] = useState();
+
   // abc to push changes on github ...
   // console.log("selected",selectedValue);
   const images = [
@@ -37,13 +38,17 @@ function Home() {
     },
   ];
 
-  useEffect(() => {
-    const token =
-      localStorage.getItem("UserToken") || localStorage.getItem("AdminToken");
-    if (!token) {
-      return navigate("/login");
+  const UserToken = localStorage.getItem("UserToken");
+  const AdminToken = localStorage.getItem("AdminToken");
+  useEffect(()=>{
+    console.log(UserToken,"admin       ",AdminToken);
+    
+    if(UserToken){
+      navigate("/")
     }
-  }, [navigate]);
+   
+
+  },[navigate])
   const getProducts = async () => {
     try {
       const token = localStorage.getItem("UserToken");
