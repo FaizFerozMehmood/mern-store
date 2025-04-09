@@ -16,12 +16,12 @@ const PORT = process.env.PORT
 
 connectDb()
 const app = express()
-// app.use(express.json());
+app.use(express.json());
 // app.use(cors({
 //     origin:"http://localhost:5173",
 //     credentials: true,
 // }))
-// changes to be committed....
+// changes to be committed......
 app.use(
     cors({
       // origin: 'http://localhost:5173/',
@@ -31,17 +31,12 @@ app.use(
     })
   );      
 // changes to be committed!..
-// app.use(
-//   cors({
-//     origin: [
-//       'http://localhost:5173',
-//       'https://mern-store-wens.vercel.app' 
-//     ],
-//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//     allowedHeaders: ['Content-Type', 'Authorization'],
-//   })
-// );
-  // abc to push changes on github ...
+
+  // abc to push changes on github ......
+  // abc to push changes on github ......
+  // abc to push changes on github ......
+  // abc to push changes on github ......
+  // abc to push changes on github ......
 
   app.options('*', cors());
 

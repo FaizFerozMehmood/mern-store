@@ -13,11 +13,17 @@ const Login = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
 
+  useEffect(() => {
+    const UserToken = localStorage.getItem("UserToken");
+    const AdminToken = localStorage.getItem("AdminToken");
+    if (UserToken) {
+      navigate("/");
+    } else if (AdminToken) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   const onFinish = async (values) => {
-     
-    // console.log("savedUserName in local storage ",savedUserName);
-    // console.log("Received values of form: ", values);
     setIsLoading(true);
 
     const loginData = {
@@ -27,44 +33,29 @@ const Login = () => {
 
     try {
       const response = await axios.post(url.login, loginData);
-      // console.log("Token:", response.data?.data?.token);
-
       form.resetFields();
 
       Cookies.set("userInfo", JSON.stringify(response.data?.data?.user), {
         expires: 7,
       });
-      console.log("Response", response)
 
-      if (response.data?.data?.user?.role === "admin") {
-        localStorage.setItem("AdminToken", response.data?.data?.token);
+      const user = response.data?.data?.user;
+      const token = response.data?.data?.token;
+
+      if (user?.role === "admin") {
+        localStorage.setItem("AdminToken", token);
       } else {
-        localStorage.setItem("UserToken", response.data?.data?.token);
+        localStorage.setItem("UserToken", token);
       }
 
       if (response.status === 200) {
         toast.success(`Welcome to the page!`);
 
-        setTimeout(() => {
-          const userInfoString = Cookies.get("userInfo");
-          if (userInfoString) {
-            try {
-              const userInfo = JSON.parse(userInfoString);
-              
-
-              if (userInfo.role === "admin") {
-                navigate("/dashboard");   
-              } else {
-                navigate("/");
-              }
-            } catch (error) {
-              // console.error("Error parsing user info:", error);
-              toast.error("Failed to parse user information.");
-            }
-          } else {
-            toast.error("User info not found.");
-          }
-        }, 2000);
+        if (user?.role === "admin") {
+          navigate("/dashboard");
+        } else {
+          navigate("/");
+        }
       }
     } catch (error) {
       toast.error("Something went wrong!");
@@ -72,7 +63,7 @@ const Login = () => {
       setIsLoading(false);
     }
   };
-// changes is being made to reflect 
+
   return (
     <div style={styles.container}>
       <div style={styles.formWrapper}>
@@ -129,7 +120,7 @@ const Login = () => {
         </Form>
       </div>
 
-      <ToastContainer   
+      <ToastContainer
         position="top-right"
         autoClose={3000}
         hideProgressBar={false}

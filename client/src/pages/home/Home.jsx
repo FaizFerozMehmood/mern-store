@@ -39,15 +39,16 @@ function Home() {
   ];
   // abc to push changes on github ...
 
-  const UserToken = localStorage.getItem("UserToken");
-  const AdminToken = localStorage.getItem("AdminToken");
-  useEffect(() => {
-    console.log(UserToken, "admin       ", AdminToken);
-
-    if (UserToken) {
-      navigate("/");
-    }
-  }, [navigate]);
+   useEffect(() => {
+      const UserToken = localStorage.getItem("UserToken");
+      const AdminToken = localStorage.getItem("AdminToken");
+  
+      if (UserToken) {
+        navigate("/");
+      } else if (AdminToken) {
+        navigate("/dashboard");
+      }
+    }, [navigate]);
   const getProducts = async () => {
     try {
       const token = localStorage.getItem("UserToken");

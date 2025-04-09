@@ -27,6 +27,7 @@ import {
 import moment from "moment";
 import Navbar from "./AdminNav";
 import { useMediaQuery } from "react-responsive";
+import { useNavigate } from "react-router-dom";
 
 const { Header, Content } = Layout;
 const { Title, Text, Paragraph } = Typography;
@@ -37,9 +38,21 @@ function Dashboard() {
   const [users, setUsers] = useState([]);
   const [totalOrders, setTotalOrders] = useState(0);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate()
 
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
+
+    useEffect(() => {
+        const UserToken = localStorage.getItem("UserToken");
+        const AdminToken = localStorage.getItem("AdminToken");
+    
+        if (AdminToken) {
+          navigate("/dashboard");
+        } else if (UserToken) {
+          navigate("/");
+        }
+      }, [navigate]);
 
   const GetOrdersfromDB = async () => {
     try {
