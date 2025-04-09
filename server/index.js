@@ -41,6 +41,7 @@ app.use(
 //     allowedHeaders: ['Content-Type', 'Authorization'],
 //   })
 // );
+  // abc to push changes on github ...
 
   app.options('*', cors());
 
@@ -55,6 +56,7 @@ app.use("/user",getProducts)
 // app.use("/products",searchproduct)
 app.use("/products", productRoutes) // to search products
 app.use("/api/orders",orderRoutes)
+  // abc to push changes on github ...
 
 // ADMIN CAN DELETE PRODUCTS ON:
 // http://localhost:5000/admin/admin/id
