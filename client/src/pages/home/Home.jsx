@@ -40,15 +40,13 @@ function Home() {
 
   const UserToken = localStorage.getItem("UserToken");
   const AdminToken = localStorage.getItem("AdminToken");
-  useEffect(()=>{
-    console.log(UserToken,"admin       ",AdminToken);
-    
-    if(UserToken){
-      navigate("/")
-    }
-   
+  useEffect(() => {
+    console.log(UserToken, "admin       ", AdminToken);
 
-  },[navigate])
+    if (UserToken) {
+      navigate("/");
+    }
+  }, [navigate]);
   const getProducts = async () => {
     try {
       const token = localStorage.getItem("UserToken");
@@ -58,13 +56,11 @@ function Home() {
       });
       setData(response.data?.data);
     } catch (error) {
-      // console.log("Error fetching products:", error);
     } finally {
       setLoading(false);
     }
   };
   const handleChange = (e) => {
-    // console.log(e.target.value);
     const newValue = e.target.value;
     setSelectedValue(newValue);
     handleCategoryChanges(newValue);
