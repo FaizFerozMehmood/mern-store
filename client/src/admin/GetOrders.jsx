@@ -151,6 +151,9 @@ function GetOrders() {
         key: "actions",
         render: (_, record) => (
           <Button
+          style={{
+            backgroundColor:"black"
+          }}
             type="primary"
             size={isMobile ? "small" : "middle"}
             icon={<EyeOutlined />}
@@ -217,6 +220,9 @@ function GetOrders() {
         actions={[
           <Button
             type="primary"
+            style={{
+              backgroundColor:"black"
+            }}
             onClick={() => showOrderDetails(order)}
             icon={<EyeOutlined />}
             size="small"

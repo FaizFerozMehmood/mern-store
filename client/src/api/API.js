@@ -14,7 +14,8 @@ export const url = {
   getuserOrder: `${BASE_URL}api/orders/myorder`,
   searchProducts: `${BASE_URL}products/search`,
   getUsers: `${BASE_URL}admin/users`,
-  findByCategories:`${BASE_URL}products/findCategory`
+  findByCategories:`${BASE_URL}products/findCategory`,
+  uplaodProfile: `${BASE_URL}profile/uploadProfile`
 
   // http://localhost:5000/products/findCategory?category=Perfumes
 };

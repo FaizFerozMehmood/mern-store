@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import {
   Button,
   Layout,
@@ -13,8 +13,11 @@ import {
   theme,
   Avatar,
   Divider,
+  message,
+  Modal,
 } from "antd";
 import Cookies from "js-cookie";
+import axios from "axios";
 import {
   LogoutOutlined,
   ShoppingCartOutlined,
@@ -26,8 +29,11 @@ import {
   UserOutlined,
   DownOutlined,
   ShopOutlined,
+  UploadOutlined,
+  CameraOutlined,
 } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
+import { url } from "../../api/API";
 
 const { Header, Content } = Layout;
 const { Title, Text } = Typography;
@@ -39,10 +45,15 @@ const Navbar = ({ leng }) => {
   const [scrolled, setScrolled] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [name, setName] = useState("");
+  const [img, setImg] = useState("");
+  const [uploadModalVisible, setUploadModalVisible] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
+  const fileInputRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { token } = useToken();
-
   const primaryColor = "#2a5637";
   const secondaryColor = "#e4ede6";
   const accentColor = "#ff6b35";
@@ -54,6 +65,7 @@ const Navbar = ({ leng }) => {
     if (userData) {
       const userInfo = JSON.parse(userData);
       setName(userInfo.name);
+      setImg(userInfo.profileImage);
     }
   }, []);
 
@@ -113,6 +125,72 @@ const Navbar = ({ leng }) => {
     navigate("/login");
   };
 
+  const handleProfileClick = () => {
+    setUploadModalVisible(true);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        message.error("Image size should be less than 5MB");
+        return;
+      }
+      setSelectedFile(file);
+      setPreviewUrl(URL.createObjectURL(file));
+    }
+  };
+
+  const uploadProfileImage = async () => {
+    if (!selectedFile) {
+      message.error("Please select an image first");
+      return;
+    }
+
+    setUploading(true);
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      const userToken = localStorage.getItem("UserToken");
+      const response = await axios.post(url.uplaodProfile, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+      console.log(response.data?.profileImage);
+      console.log(response);
+
+      if (response.data.profileImage) {
+        setImg(response.data.profileImage);
+
+        const userData = Cookies.get("userInfo");
+        if (userData) {
+          const userInfo = JSON.parse(userData);
+          userInfo.profileImage = response.data.profileImage;
+          Cookies.set("userInfo", JSON.stringify(userInfo), { expires: 7 });
+        }
+
+        message.success("Profile image updated successfully");
+        setUploadModalVisible(false);
+        setSelectedFile(null);
+        setPreviewUrl("");
+      } else {
+        message.error("Failed to upload image");
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      message.error("Error uploading image. Please try again.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current.click();
+  };
+
   const menuItems = useMemo(
     () => [
       { key: "/", label: "Home", icon: <HomeOutlined /> },
@@ -129,7 +207,13 @@ const Navbar = ({ leng }) => {
 
   const userDropdownItems = [
     {
-      key: "#",
+      key: "profile",
+      label: "Update Profile Image",
+      icon: <CameraOutlined />,
+      onClick: handleProfileClick,
+    },
+    {
+      key: "myprofile",
       label: "My Profile",
       icon: <UserOutlined />,
       onClick: () => navigate(""),
@@ -316,8 +400,16 @@ const Navbar = ({ leng }) => {
                   }}
                 >
                   <Space>
-                    <UserOutlined />
-                    <span>Account</span>
+                    {img ? (
+                      <Avatar
+                        src={img}
+                        size="small"
+                        style={{ marginRight: "-6px" }}
+                      />
+                    ) : (
+                      <UserOutlined />
+                    )}
+                    <span>{name || "Account"}</span>
                     <DownOutlined style={{ fontSize: "12px" }} />
                   </Space>
                 </Button>
@@ -378,8 +470,11 @@ const Navbar = ({ leng }) => {
             >
               <Avatar
                 size={40}
-                icon={<UserOutlined />}
+                src={img}
+                icon={!img && <UserOutlined />}
                 style={{ backgroundColor: primaryColor, marginRight: "12px" }}
+                onClick={handleProfileClick}
+                className="profile-avatar"
               />
               <div>
                 <Text strong style={{ display: "block" }}>
@@ -408,16 +503,13 @@ const Navbar = ({ leng }) => {
 
               <Button
                 type="primary"
-                icon={<UserOutlined />}
-                onClick={() => {
-                  navigate("#");
-                  setIsDrawerOpen(false);
-                }}
+                icon={<CameraOutlined />}
+                onClick={handleProfileClick}
                 style={{
                   backgroundColor: primaryColor,
                 }}
               >
-                Profile
+                Update Photo
               </Button>
             </Space>
           </div>
@@ -459,6 +551,88 @@ const Navbar = ({ leng }) => {
           <div style={{ paddingTop: `${headerHeight}px` }} />
           {/* <p>hello</p> */}
         </Content>
+
+        {/* Profile Image Upload Modal */}
+        <Modal
+          title="Update Profile Image"
+          open={uploadModalVisible}
+          onCancel={() => {
+            setUploadModalVisible(false);
+            setSelectedFile(null);
+            setPreviewUrl("");
+          }}
+          footer={[
+            <Button
+              key="cancel"
+              onClick={() => {
+                setUploadModalVisible(false);
+                setSelectedFile(null);
+                setPreviewUrl("");
+              }}
+            >
+              Cancel
+            </Button>,
+            <Button
+              key="upload"
+              type="primary"
+              loading={uploading}
+              onClick={uploadProfileImage}
+              disabled={!selectedFile}
+            >
+              Upload
+            </Button>,
+          ]}
+        >
+          <div style={{ textAlign: "center", padding: "20px 0" }}>
+            <div
+              style={{
+                marginBottom: "20px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Avatar
+                size={100}
+                src={previewUrl || img}
+                icon={!img && !previewUrl && <UserOutlined />}
+                style={{
+                  backgroundColor: primaryColor,
+                  border: `2px solid ${primaryColor}`,
+                  cursor: "pointer",
+                }}
+                onClick={triggerFileInput}
+              />
+            </div>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              style={{ display: "none" }}
+            />
+
+            <Button icon={<UploadOutlined />} onClick={triggerFileInput}>
+              Select Image
+            </Button>
+
+            <Text
+              type="secondary"
+              style={{ display: "block", marginTop: "10px" }}
+            >
+              Click on the avatar or button to select a new profile image
+            </Text>
+
+            {selectedFile && (
+              <Text
+                type="success"
+                style={{ display: "block", marginTop: "10px" }}
+              >
+                Selected: {selectedFile.name}
+              </Text>
+            )}
+          </div>
+        </Modal>
 
         <style>
           {`
@@ -582,6 +756,17 @@ const Navbar = ({ leng }) => {
               margin-right: 8px;
               display: inline-flex;
               vertical-align: middle;
+            }
+            
+            /* Profile avatar hover effect */
+            .profile-avatar {
+              cursor: pointer;
+              transition: all 0.3s ease;
+            }
+            
+            .profile-avatar:hover {
+              transform: scale(1.05);
+              box-shadow: 0 0 0 2px rgba(42, 86, 55, 0.5);
             }
           `}
         </style>

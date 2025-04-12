@@ -207,10 +207,10 @@ const ContactComponent = () => {
   return (
     <div style={styles.container}>
       <div style={styles.profileContainer}>
-        <Avatar 
-          size={getProfileSize()} 
-           src={"/unnamed.jpg"}
-          alt="Faiz Mahmood" 
+        <Avatar
+          size={getProfileSize()}
+          src={"/faiz.jpg"}
+          alt="Faiz Mahmood"
           style={styles.profileImage}
         />
         <Title level={windowWidth <= 480 ? 3 : 2} style={styles.title}>
@@ -220,9 +220,9 @@ const ContactComponent = () => {
       </div>
 
       <Paragraph style={styles.description}>
-        Hi, I'm a passionate developer always open for
-        collaboration, new opportunities, and interesting projects. Feel free to
-        reach out through any of these platforms.
+        Hi, I'm a passionate developer always open for collaboration, new
+        opportunities, and interesting projects. Feel free to reach out through
+        any of these platforms.
       </Paragraph>
 
       <Row justify="center" style={styles.iconContainer}>

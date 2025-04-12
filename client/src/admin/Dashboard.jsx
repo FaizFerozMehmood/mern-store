@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { url } from "../api/API";
+import Cookies from "js-cookie";
 import {
   Layout,
   Card,
@@ -38,21 +39,33 @@ function Dashboard() {
   const [users, setUsers] = useState([]);
   const [totalOrders, setTotalOrders] = useState(0);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate()
+  const [img, setImg] = useState("");
+  const navigate = useNavigate();
 
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
 
-    useEffect(() => {
-        const UserToken = localStorage.getItem("UserToken");
-        const AdminToken = localStorage.getItem("AdminToken");
-    
-        if (AdminToken) {
-          navigate("/dashboard");
-        } else if (UserToken) {
-          navigate("/");
-        }
-      }, [navigate]);
+  useEffect(() => {
+    const userData = Cookies.get("userInfo");
+    if (userData) {
+      const userInfo = JSON.parse(userData);
+      console.log(userInfo);
+
+      //  setName(userInfo.name);
+      setImg(userInfo.profileImage);
+    }
+  }, []);
+
+  useEffect(() => {
+    const UserToken = localStorage.getItem("UserToken");
+    const AdminToken = localStorage.getItem("AdminToken");
+
+    if (AdminToken) {
+      navigate("/dashboard");
+    } else if (UserToken) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   const GetOrdersfromDB = async () => {
     try {
@@ -87,10 +100,13 @@ function Dashboard() {
       const response = await axios.get(url.getUsers, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      // console.log(response?.data?.data?.name);
+
       setTotalUsers(response.data?.data?.length || 0);
-      setUsers(response.data?.data || []);
+      setUsers((response.data?.data || []).reverse());
+      // console.log((response.data?.data || []).reverse());
     } catch (error) {
-      console.log("Error fetching users:", error);
+      console.log("error fetching users:", error);
     } finally {
       setLoading(false);
     }
@@ -102,6 +118,29 @@ function Dashboard() {
     GetOrdersfromDB();
   }, []);
 
+  // Function to render user avatar with fallback
+  const renderUserAvatar = (user) => {
+    if (user.profileImage && user.profileImage.trim() !== "") {
+      return (
+        <Avatar
+          src={user.profileImage}
+          onError={(e) => {
+            // If image fails to load, fall back to icon
+            const target = e.target;
+            target.onerror = null; // Prevent infinite loop
+            target.src = ""; // Clear the src
+            return false;
+          }}
+          style={{ backgroundColor: "#1890ff" }}
+        />
+      );
+    }
+    // Default fallback if no image or empty string
+    return (
+      <Avatar icon={<UserOutlined />} style={{ backgroundColor: "#1890ff" }} />
+    );
+  };
+
   const columns = [
     {
       title: "User",
@@ -109,11 +148,8 @@ function Dashboard() {
       key: "name",
       render: (text, record) => (
         <div style={{ display: "flex", alignItems: "center" }}>
-          <Avatar
-            icon={<UserOutlined />}
-            style={{ marginRight: 12, backgroundColor: "#1890ff" }}
-          />
-          <div>
+          {renderUserAvatar(record)}
+          <div style={{ marginLeft: 12 }}>
             <div style={{ fontWeight: 500 }}>{text}</div>
             <div style={{ fontSize: "12px", color: "#8c8c8c" }}>
               {record.email}
@@ -149,41 +185,6 @@ function Dashboard() {
     },
   ];
 
-  const cardStyles = [
-    {
-      backgroundColor: "#e6f7ff",
-      color: "#1890ff",
-      borderLeft: "4px solid #1890ff",
-      infoText: "Total number of registered users in the system.",
-      icon: <UserOutlined />,
-      title: "Total Users",
-    },
-    {
-      backgroundColor: "#f6ffed",
-      color: "#52c41a",
-      borderLeft: "4px solid #52c41a",
-      infoText: "Total products available in inventory.",
-      icon: <ShoppingOutlined />,
-      title: "Total Products",
-    },
-    {
-      backgroundColor: "#fff7e6",
-      color: "#fa8c16",
-      borderLeft: "4px solid #fa8c16",
-      infoText: "Total orders placed by customers.",
-      icon: <ShoppingCartOutlined />,
-      title: "Total Orders",
-    },
-    {
-      backgroundColor: "#f9f0ff",
-      color: "#722ed1",
-      borderLeft: "4px solid #722ed1",
-      infoText: "Estimated revenue based on order volume.",
-      icon: <DollarOutlined />,
-      title: "Sales",
-    },
-  ];
-
   const UserListMobile = () => (
     <List
       itemLayout="horizontal"
@@ -191,12 +192,7 @@ function Dashboard() {
       renderItem={(user) => (
         <List.Item>
           <List.Item.Meta
-            avatar={
-              <Avatar
-                icon={<UserOutlined />}
-                style={{ backgroundColor: "#1890ff" }}
-              />
-            }
+            avatar={renderUserAvatar(user)}
             title={user.name}
             description={
               <Space direction="vertical" size={0}>
@@ -280,6 +276,41 @@ function Dashboard() {
       </Text>
     </Card>
   );
+
+  const cardStyles = [
+    {
+      backgroundColor: "#e6f7ff",
+      color: "#1890ff",
+      borderLeft: "4px solid #1890ff",
+      infoText: "Total number of registered users in the system.",
+      icon: <UserOutlined />,
+      title: "Total Users",
+    },
+    {
+      backgroundColor: "#f6ffed",
+      color: "#52c41a",
+      borderLeft: "4px solid #52c41a",
+      infoText: "Total products available in inventory.",
+      icon: <ShoppingOutlined />,
+      title: "Total Products",
+    },
+    {
+      backgroundColor: "#fff7e6",
+      color: "#fa8c16",
+      borderLeft: "4px solid #fa8c16",
+      infoText: "Total orders placed by customers.",
+      icon: <ShoppingCartOutlined />,
+      title: "Total Orders",
+    },
+    {
+      backgroundColor: "#f9f0ff",
+      color: "#722ed1",
+      borderLeft: "4px solid #722ed1",
+      infoText: "Estimated revenue based on order volume.",
+      icon: <DollarOutlined />,
+      title: "Sales",
+    },
+  ];
 
   return (
     <div>

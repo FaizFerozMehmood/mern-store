@@ -2,7 +2,8 @@ import express from "express";
 import multer from "multer";
 import os from "os";
 import fs from "fs";
-import { uploadFileController } from "../controllers/uploadFileController.js";
+import { uploadFileController, uploadPrOrofileController } from "../controllers/uploadFileController.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const uploadFileRouter = express.Router();
 
@@ -19,6 +20,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 uploadFileRouter.post("/upload", upload.single("file"), uploadFileController);
+uploadFileRouter.post("/uploadProfile", authMiddleware, upload.single("file"), uploadPrOrofileController);
+
 
 export default uploadFileRouter;
 

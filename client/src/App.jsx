@@ -16,6 +16,7 @@ import UserOrders from "./pages/home/OrderSuccess.jsx";
 import ProductCart from "./admin/ProductCart.jsx";
 import ContactComponent from "./pages/home/Contact.jsx";
 import Dashboard from "./admin/Dashboard.jsx";
+// import ProfileUploader from "./pages/home/Profile.jsx";
  const token = localStorage.getItem("UserToken");
 function App() {
   // making changes to push to github
@@ -40,6 +41,7 @@ function App() {
           <Route path={"/dashboard"} element={<Dashboard />} />
           <Route path={"/AdminNav"} element={<AdminNav />} />
           <Route path={"/navbar"} element={<Navbar />} />
+          {/* <Route path={"/profile"} element={<ProfileUploader />} /> */}
 
           <Route path={"/contact"} element={<ContactComponent />} />
           <Route path={"/admin"} element={<ProductForm />} />

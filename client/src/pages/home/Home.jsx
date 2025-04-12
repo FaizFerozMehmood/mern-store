@@ -49,6 +49,7 @@ function Home() {
         navigate("/dashboard");
       }
     }, [navigate]);
+    
   const getProducts = async () => {
     try {
       const token = localStorage.getItem("UserToken");
