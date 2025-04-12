@@ -31,7 +31,7 @@ app.use(
 
 app.options("*", cors());
 
-// changes to be commited to let it be worked as expected...
+// changes to be commited to let it be worked as expected......
 
 app.use("/api/auth", userAuth);
 app.use("/admin", adminRoutes);

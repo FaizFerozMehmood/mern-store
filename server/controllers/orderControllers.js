@@ -81,7 +81,6 @@ export const getOrders = async (req, res) => {
 
 export const updateOrderStatus = async (req, res) => {
   try {
-    // console.log("status===================>",req.body.status);
     
     const { id } = req.params;
     const { status } = req.body;

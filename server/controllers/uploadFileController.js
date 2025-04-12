@@ -18,7 +18,6 @@ export const uploadFileController = async (req, res) => {
       return sendResponse(res, 403, null, true, "No file uploaded.");
     }
 
-    // console.log("Local file path:", req.file.path);
 
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: "uploads",
@@ -35,7 +34,6 @@ export const uploadFileController = async (req, res) => {
 };
 
 
-// import fs from "fs";
 
 export const uploadPrOrofileController = async (req, res) => {
   try {
@@ -46,11 +44,9 @@ export const uploadPrOrofileController = async (req, res) => {
       folder: "profile_images",
     });
 
-    // Remove local file after upload
     fs.unlinkSync(localPath);
 
-    // Save the image URL to the user in MongoDB
-    const userId = req.user.id; // Make sure you're using auth middleware!
+    const userId = req.user.id; 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { profileImage: result.secure_url },

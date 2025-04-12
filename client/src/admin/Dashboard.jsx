@@ -66,7 +66,7 @@ function Dashboard() {
       navigate("/");
     }
   }, [navigate]);
-
+  // Update code to reflect recent changes...
   const GetOrdersfromDB = async () => {
     try {
       const token = localStorage.getItem("AdminToken");
