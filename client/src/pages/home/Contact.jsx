@@ -34,7 +34,7 @@ const ContactComponent = () => {
     instagram: "https://instagram.com/Faaiz2003",
     whatsapp: "https://wa.me/923169336621",
     email: "mailto:ferozfaaiz5@gmail.com",
-    portfolio: "https://yourportfolio.com",
+    portfolio: "https://myportfolio.com",
   };
 
   const handleGoBack = () => {

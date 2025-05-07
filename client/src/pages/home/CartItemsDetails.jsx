@@ -284,7 +284,7 @@ function CartItemsDetails() {
         </Title>
         <Paragraph type="secondary">
           Review your items, adjust quantities or remove products before
-          checkout
+          placing order
         </Paragraph>
       </div>
 
@@ -456,7 +456,7 @@ function CartItemsDetails() {
                 maxWidth: "400px",
               }}
             >
-              Complete Order
+              Place Order
             </Button>
           </div>
 

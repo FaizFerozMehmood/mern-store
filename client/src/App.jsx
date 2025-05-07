@@ -16,6 +16,7 @@ import UserOrders from "./pages/home/OrderSuccess.jsx";
 import ProductCart from "./admin/ProductCart.jsx";
 import ContactComponent from "./pages/home/Contact.jsx";
 import Dashboard from "./admin/Dashboard.jsx";
+// import Pos from "./admin/Pos.jsx";
 // import ProfileUploader from "./pages/home/Profile.jsx";
  const token = localStorage.getItem("UserToken");
 function App() {
