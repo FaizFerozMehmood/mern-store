@@ -21,18 +21,10 @@ app.use(cors({
     origin:"https://mern-store-wens.vercel.app",
     credentials: true,
 }))
-// app.use(
-//   cors({
-//     // origin: 'http://localhost:5173/',
-//     origin: "https://mern-store-wens.vercel.app",
-//     methods: ["GET", "POST", "PUT", "DELETE"],
-//     allowedHeaders: ["Content-Type", "Authorization"],
-//   })
-// );
+
 
 app.options("*", cors());
 
-// changes to be commited to let it be worked as expected......
 
 app.use("/api/auth", userAuth);
 app.use("/admin", adminRoutes);

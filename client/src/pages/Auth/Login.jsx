@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Spin } from "antd";
+import { Button, Flex, Form, Input, Spin } from "antd";
 import { url } from "../../api/API";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -66,6 +66,13 @@ const Login = () => {
 
   return (
     <div style={styles.container}>
+      <div style={styles.adminInfo}>
+        <p>
+          <strong>Admin Login:</strong>
+        </p>
+        <p>Email: faiz@gmail.com</p>
+        <p>Password: faiz123</p>
+      </div>
       <div style={styles.formWrapper}>
         <h2 style={styles.title}>Login</h2>
 
@@ -136,10 +143,22 @@ const Login = () => {
 const styles = {
   container: {
     display: "flex",
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     height: "100vh",
     backgroundColor: "#f4f4f4",
+  },
+  adminInfo: {
+    backgroundColor: "#fff3cd",
+    border: "1px solid #ffeeba",
+    padding: "15px",
+    borderRadius: "8px",
+    marginBottom: "15px",
+    textAlign: "center",
+    color: "#856404",
+    width: "90%",
+    maxWidth: "400px",
   },
   formWrapper: {
     backgroundColor: "#fff",
